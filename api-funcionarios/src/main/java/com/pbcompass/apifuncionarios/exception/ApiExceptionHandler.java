@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @ControllerAdvice
 @Slf4j
-public class ExceptionHandler {
+public class ApiExceptionHandler {
 
 
 }
