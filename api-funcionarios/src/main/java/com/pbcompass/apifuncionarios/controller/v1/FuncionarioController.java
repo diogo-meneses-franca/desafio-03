@@ -30,12 +30,6 @@ public class FuncionarioController {
 
     private final FuncionarioService service;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<FuncionarioRespostaDto> buscarPorId(@PathVariable Long id) {
-        Funcionario funcionario = service.buscarPorId(id);
-        FuncionarioRespostaDto resposta = FuncionarioMapper.toDto(funcionario, FuncionarioRespostaDto.class);
-        return ResponseEntity.status(HttpStatus.OK).body(resposta);
-    }
 
     @Operation(summary = "Cadastrar um novo funcionário",
             responses = {
@@ -62,4 +56,24 @@ public class FuncionarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
+    @Operation(summary = "Buscar um funcionário pelo seu id",
+            responses = {
+                    @ApiResponse(
+                            description = "Sucesso",
+                            responseCode = "200",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = FuncionarioRespostaDto.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Funcionário com o id não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
+            }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<FuncionarioRespostaDto> buscarPorId(@PathVariable Long id) {
+        Funcionario funcionario = service.buscarPorId(id);
+        FuncionarioRespostaDto resposta = FuncionarioMapper.toDto(funcionario, FuncionarioRespostaDto.class);
+        return ResponseEntity.status(HttpStatus.OK).body(resposta);
+    }
 }
