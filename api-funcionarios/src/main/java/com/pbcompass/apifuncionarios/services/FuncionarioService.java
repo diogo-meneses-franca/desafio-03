@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FuncionarioService {
 
-    private FuncionarioRepository repository;
+    private final FuncionarioRepository repository;
 }
