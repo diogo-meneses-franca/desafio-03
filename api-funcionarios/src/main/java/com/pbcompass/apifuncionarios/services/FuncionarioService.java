@@ -17,7 +17,7 @@ public class FuncionarioService {
         try {
             return repository.save(funcionario);
         } catch (DataIntegrityViolationException e) {
-            throw new CpfUnicoException("CPF já cadastrado no sistema");
+            throw new CpfUnicoException("Dados já cadastrados no sistema");
         }
     }
 }

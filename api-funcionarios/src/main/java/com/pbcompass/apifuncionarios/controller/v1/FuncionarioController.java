@@ -37,7 +37,7 @@ public class FuncionarioController {
                     ),
                     @ApiResponse(
                             responseCode = "409",
-                            description = "CPF já cadastrado",
+                            description = "Dados já cadastrados no sistema",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
                     ),
                     @ApiResponse(responseCode = "422",
