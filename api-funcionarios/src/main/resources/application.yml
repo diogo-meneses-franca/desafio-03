@@ -20,4 +20,4 @@ springdoc:
     path: /v1/api-docs
   swagger-ui:
     path: /swagger-ui.html
-  packages-to-scan: com.pbcompass.apifuncionarios.controller.v1
+  packages-to-scan: com.pbcompass.apifuncionarios.controller
