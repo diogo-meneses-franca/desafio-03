@@ -72,6 +72,26 @@ public class FuncionarioController {
         return ResponseEntity.status(HttpStatus.OK).body(resposta);
     }
 
+    @Operation(summary = "Deleta um funcionário pelo seu id",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "Sucesso sem conteúdo",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Funcionário com o id não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Parâmetros inválidos",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    )
+            }
+    )
+
     @DeleteMapping("{id}")
     public ResponseEntity<?> excluir(@PathVariable Long id) {
         service.excluir(id);
