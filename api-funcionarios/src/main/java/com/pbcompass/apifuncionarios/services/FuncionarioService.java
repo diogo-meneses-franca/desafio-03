@@ -2,6 +2,7 @@ package com.pbcompass.apifuncionarios.services;
 
 import com.pbcompass.apifuncionarios.entities.Funcionario;
 import com.pbcompass.apifuncionarios.exception.CpfUnicoException;
+import com.pbcompass.apifuncionarios.exception.custom.RecursoNaoEncontrado;
 import com.pbcompass.apifuncionarios.repository.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,11 @@ public class FuncionarioService {
         } catch (DataIntegrityViolationException e) {
             throw new CpfUnicoException("Dados já cadastrados no sistema");
         }
+    }
+
+    public void excluir(long id) {
+        Funcionario entity = repository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontrado("Não existe o id a ser deletado"));
+        repository.delete(entity);
     }
 }
