@@ -38,8 +38,9 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public Funcionario editar(Funcionario funcionario) {
+    public Funcionario editar(Long id, Funcionario funcionario) {
         try {
+            var entidade = repository.findById(id);
             return repository.saveAndFlush(funcionario);
         } catch (DataIntegrityViolationException e) {
             throw new ErroAoSalvarFuncionario("Erro ao atualizar funcionário no banco de dados");

@@ -112,10 +112,11 @@ public class FuncionarioController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))),
             }
     )
-    @PutMapping
-    public ResponseEntity<FuncionarioRespostaDto> editar(@Valid @RequestBody FuncionarioCadastrarDto dto){
+    @PutMapping("/{id}")
+    public ResponseEntity<FuncionarioRespostaDto> editar(@PathVariable Long id,
+                                                         @Valid @RequestBody FuncionarioCadastrarDto dto){
         Funcionario funcionario = FuncionarioMapper.toEntity(dto, Funcionario.class);
-        FuncionarioRespostaDto resposta = FuncionarioMapper.toDto(service.editar(funcionario), FuncionarioRespostaDto.class);
+        FuncionarioRespostaDto resposta = FuncionarioMapper.toDto(service.editar(id, funcionario), FuncionarioRespostaDto.class);
         return ResponseEntity.ok(resposta);
     }
 }
