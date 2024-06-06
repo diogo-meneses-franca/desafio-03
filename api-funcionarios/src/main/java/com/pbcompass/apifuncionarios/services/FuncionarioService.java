@@ -2,6 +2,7 @@ package com.pbcompass.apifuncionarios.services;
 
 import com.pbcompass.apifuncionarios.entities.Funcionario;
 import com.pbcompass.apifuncionarios.exception.CpfUnicoException;
+import com.pbcompass.apifuncionarios.exception.custom.ErroAoSalvarFuncionario;
 import com.pbcompass.apifuncionarios.repository.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,15 @@ public class FuncionarioService {
             return repository.save(funcionario);
         } catch (DataIntegrityViolationException e) {
             throw new CpfUnicoException("Dados já cadastrados no sistema");
+        }
+    }
+
+    @Transactional
+    public Funcionario editar(Funcionario funcionario) {
+        try {
+            return repository.saveAndFlush(funcionario);
+        } catch (DataIntegrityViolationException e) {
+            throw new ErroAoSalvarFuncionario("Erro ao atualizar funcionário no banco de dados");
         }
     }
 }
