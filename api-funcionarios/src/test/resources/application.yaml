@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: ms-funcionario
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+  datasource:
+    url: jdbc:h2:~/dbfuncionariotest;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: admin
+    password: admin
