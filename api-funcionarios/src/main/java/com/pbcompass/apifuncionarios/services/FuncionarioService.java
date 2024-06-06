@@ -22,12 +22,19 @@ public class FuncionarioService {
                 new EntityNotFoundException(String.format("Funcionario com o id %d não encontrado", id)));
     }
 
+    @Transactional
     public Funcionario cadastrar(Funcionario funcionario) {
         try {
             return repository.save(funcionario);
         } catch (DataIntegrityViolationException e) {
             throw new CpfUnicoException("Dados já cadastrados no sistema");
         }
+    }
+
+    public void excluir(long id) {
+        Funcionario  entidade = repository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(String.format("funcionários com o id %d não encontrado", id )));
+        repository.delete(entidade);
     }
 
     @Transactional
