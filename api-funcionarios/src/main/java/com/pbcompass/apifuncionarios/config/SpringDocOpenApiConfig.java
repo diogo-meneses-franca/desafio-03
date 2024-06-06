@@ -15,6 +15,7 @@ public class SpringDocOpenApiConfig {
                         new Info()
                                 .title("REST API - Funcionários")
                                 .description("API para gestão de funcionários.")
+                                .version("V1")
                 );
     }
 }
