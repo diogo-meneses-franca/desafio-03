@@ -31,8 +31,8 @@ public class FuncionarioService {
     }
 
     public void excluir(long id) {
-        Funcionario entity = repository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontrado("Não existe o id a ser deletado"));
-        repository.delete(entity);
+        Funcionario  entidade = repository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(String.format("funcionários com o id %d não encontrado", id )));
+        repository.delete(entidade);
     }
 }
