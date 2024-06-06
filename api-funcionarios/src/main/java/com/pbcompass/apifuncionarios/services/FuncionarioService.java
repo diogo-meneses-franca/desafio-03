@@ -31,6 +31,12 @@ public class FuncionarioService {
         }
     }
 
+    public void excluir(long id) {
+        Funcionario  entidade = repository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(String.format("funcionários com o id %d não encontrado", id )));
+        repository.delete(entidade);
+    }
+
     @Transactional
     public Funcionario editar(Funcionario funcionario) {
         try {
