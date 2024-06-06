@@ -1,7 +1,7 @@
 package com.pbcompass.apifuncionarios.services;
 
 import com.pbcompass.apifuncionarios.entities.Funcionario;
-import com.pbcompass.apifuncionarios.exception.CpfUnicoException;
+import com.pbcompass.apifuncionarios.exception.DadosUnicosException;
 import com.pbcompass.apifuncionarios.exception.custom.ErroAoSalvarFuncionario;
 import com.pbcompass.apifuncionarios.repository.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,7 +27,7 @@ public class FuncionarioService {
         try {
             return repository.save(funcionario);
         } catch (DataIntegrityViolationException e) {
-            throw new CpfUnicoException("Dados já cadastrados no sistema");
+            throw new DadosUnicosException("CPF ou Email já cadastrado no sistema");
         }
     }
 
