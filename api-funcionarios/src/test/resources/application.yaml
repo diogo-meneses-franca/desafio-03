@@ -7,11 +7,7 @@ spring:
       hibernate:
         format_sql: false
   datasource:
-    url: jdbc:h2:mem:dbfuncionariotest
+    url: jdbc:h2:~/dbfuncionariotest;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
     username: admin
     password: admin
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
