@@ -15,3 +15,10 @@ spring:
     console:
       enabled: true
       path: /h2-console
+springdoc:
+  api-docs:
+    path: /v1/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+  packages-to-scan: com.pbcompass.apifuncionarios.controller
+
