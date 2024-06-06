@@ -29,8 +29,8 @@ public class ApiExceptionHandler {
         );
     }
 
-    @ExceptionHandler(CpfUnicoException.class)
-    public ResponseEntity<MensagemErroPadrao> cpfUnicoException(CpfUnicoException ex, HttpServletRequest request) {
+    @ExceptionHandler(DadosUnicosException.class)
+    public ResponseEntity<MensagemErroPadrao> cpfUnicoException(DadosUnicosException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new MensagemErroPadrao(
                         System.currentTimeMillis(),
