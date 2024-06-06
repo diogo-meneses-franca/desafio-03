@@ -1,5 +1,8 @@
 package com.pbcompass.apifuncionarios.exception;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -47,5 +50,4 @@ public class ApiExceptionHandler {
                         "Dados de entrada inválidos",
                         request.getRequestURI()));
     }
-
 }
