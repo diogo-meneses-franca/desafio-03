@@ -21,7 +21,7 @@ public class FuncionarioIT {
 
     @Test
     @Sql(scripts = "/sql/funcionarios/funcionarios-deletar.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    public void cadastrarFuncionario_ComDadosValidos_RetornaFuncionarioRespostaDtoStatus201(){
+    public void cadastrarFuncionario_ComDadosValidos_RetornarFuncionarioRespostaDtoStatus201(){
         FuncionarioRespostaDto resposta = testClient
                 .post()
                 .uri("/api/v1/funcionarios")
@@ -39,6 +39,44 @@ public class FuncionarioIT {
         assertThat(resposta.getEndereco()).isEqualTo("Rua Teste");
         assertThat(resposta.getTelefone()).isEqualTo("41999995888");
         assertThat(resposta.getEmail()).isEqualTo("teste@email.com");
+    }
+
+    @Test
+    public void cadastrarFuncionario_ComCpfJaCadastrado_RetornarMensagemErroPadraoStatus409(){
+        MensagemErroPadrao resposta = testClient
+                .post()
+                .uri("/api/v1/funcionarios")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "10498168387", "Rua Teste", "41999995888", "teste@email.com"))
+                .exchange()
+                .expectStatus().isEqualTo(409)
+                .expectBody(MensagemErroPadrao.class)
+                .returnResult().getResponseBody();
+
+        assertThat(resposta).isNotNull();
+        assertThat(resposta.getStatus()).isEqualTo(409);
+        assertThat(resposta.getError()).isEqualTo("Erro ao cadastrar funcionário");
+        assertThat(resposta.getMessage()).isEqualTo("CPF ou Email já cadastrado no sistema");
+        assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios");
+    }
+
+    @Test
+    public void cadastrarFuncionario_ComEmailJaCadastrado_RetornarMensagemErroPadraoStatus409(){
+        MensagemErroPadrao resposta = testClient
+                .post()
+                .uri("/api/v1/funcionarios")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "47276131076", "Rua Teste", "41999995888", "joao@email.com"))
+                .exchange()
+                .expectStatus().isEqualTo(409)
+                .expectBody(MensagemErroPadrao.class)
+                .returnResult().getResponseBody();
+
+        assertThat(resposta).isNotNull();
+        assertThat(resposta.getStatus()).isEqualTo(409);
+        assertThat(resposta.getError()).isEqualTo("Erro ao cadastrar funcionário");
+        assertThat(resposta.getMessage()).isEqualTo("CPF ou Email já cadastrado no sistema");
+        assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios");
     }
 
     @Test
