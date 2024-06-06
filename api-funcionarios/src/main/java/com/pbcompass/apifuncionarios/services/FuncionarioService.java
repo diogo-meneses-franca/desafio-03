@@ -22,6 +22,7 @@ public class FuncionarioService {
                 new EntityNotFoundException(String.format("Funcionario com o id %d não encontrado", id)));
     }
 
+    @Transactional
     public Funcionario cadastrar(Funcionario funcionario) {
         try {
             return repository.save(funcionario);
