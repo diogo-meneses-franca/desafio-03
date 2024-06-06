@@ -1,0 +1,2 @@
+INSERT INTO funcionarios (id, nome, cpf, endereco, telefone, email) VALUES (1, 'João', '10498168387', 'Rua funcionario 1', '44991111111', 'joao@email.com');
+INSERT INTO funcionarios (id, nome, cpf, endereco, telefone, email) VALUES (2, 'Maria', '28435167577', 'Rua funcionario 2', '44992222222', 'maria@email.com');
