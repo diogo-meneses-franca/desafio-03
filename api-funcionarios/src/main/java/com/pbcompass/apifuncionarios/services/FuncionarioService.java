@@ -2,7 +2,7 @@ package com.pbcompass.apifuncionarios.services;
 
 import com.pbcompass.apifuncionarios.entities.Funcionario;
 import com.pbcompass.apifuncionarios.exception.CpfUnicoException;
-import com.pbcompass.apifuncionarios.exception.custom.RecursoNaoEncontrado;
+import com.pbcompass.apifuncionarios.exception.custom.ErroAoSalvarFuncionario;
 import com.pbcompass.apifuncionarios.repository.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ public class FuncionarioService {
                 new EntityNotFoundException(String.format("Funcionario com o id %d não encontrado", id)));
     }
 
+    @Transactional
     public Funcionario cadastrar(Funcionario funcionario) {
         try {
             return repository.save(funcionario);
@@ -34,5 +35,14 @@ public class FuncionarioService {
         Funcionario  entidade = repository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(String.format("funcionários com o id %d não encontrado", id )));
         repository.delete(entidade);
+    }
+
+    @Transactional
+    public Funcionario editar(Funcionario funcionario) {
+        try {
+            return repository.saveAndFlush(funcionario);
+        } catch (DataIntegrityViolationException e) {
+            throw new ErroAoSalvarFuncionario("Erro ao atualizar funcionário no banco de dados");
+        }
     }
 }

@@ -25,7 +25,6 @@ public class FuncionarioController {
 
     private final FuncionarioService service;
 
-
     @Operation(summary = "Cadastrar um novo funcionário",
             responses = {
                     @ApiResponse(
@@ -91,10 +90,32 @@ public class FuncionarioController {
                     )
             }
     )
-
     @DeleteMapping("{id}")
     public ResponseEntity<?> excluir(@PathVariable Long id) {
         service.excluir(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Altera os dados de um funcionário",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Recurso alterado com sucesso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = FuncionarioRespostaDto.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Corpo requisição invalido",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Item a atualizar não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))),
+            }
+    )
+    @PutMapping
+    public ResponseEntity<FuncionarioRespostaDto> editar(@Valid @RequestBody FuncionarioCadastrarDto dto){
+        Funcionario funcionario = FuncionarioMapper.toEntity(dto, Funcionario.class);
+        FuncionarioRespostaDto resposta = FuncionarioMapper.toDto(service.editar(funcionario), FuncionarioRespostaDto.class);
+        return ResponseEntity.ok(resposta);
     }
 }
