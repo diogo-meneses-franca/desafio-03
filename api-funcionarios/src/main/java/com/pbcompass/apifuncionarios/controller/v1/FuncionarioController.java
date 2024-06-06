@@ -1,9 +1,9 @@
 package com.pbcompass.apifuncionarios.controller.v1;
 
-import com.pbcompass.apifuncionarios.dto.FuncionarioCadastrarDto;
 import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
 import com.pbcompass.apifuncionarios.dto.mapper.FuncionarioMapper;
 import com.pbcompass.apifuncionarios.entities.Funcionario;
+import com.pbcompass.apifuncionarios.dto.FuncionarioCadastrarDto;
 import com.pbcompass.apifuncionarios.exception.MensagemErroPadrao;
 import com.pbcompass.apifuncionarios.services.FuncionarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +15,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FuncionarioController {
 
     private final FuncionarioService service;
+
 
     @Operation(summary = "Cadastrar um novo funcionário",
             responses = {
@@ -53,4 +56,24 @@ public class FuncionarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
+    @Operation(summary = "Buscar um funcionário pelo seu id",
+            responses = {
+                    @ApiResponse(
+                            description = "Sucesso",
+                            responseCode = "200",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = FuncionarioRespostaDto.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Funcionário com o id não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
+            }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<FuncionarioRespostaDto> buscarPorId(@PathVariable Long id) {
+        Funcionario funcionario = service.buscarPorId(id);
+        FuncionarioRespostaDto resposta = FuncionarioMapper.toDto(funcionario, FuncionarioRespostaDto.class);
+        return ResponseEntity.status(HttpStatus.OK).body(resposta);
+    }
 }
