@@ -80,6 +80,25 @@ public class FuncionarioIT {
     }
 
     @Test
+    public void cadastrarFuncionario_ComDadosInvalidos_RetornarMensagemErroPadraoStatus422(){
+        MensagemErroPadrao resposta = testClient
+                .post()
+                .uri("/api/v1/funcionarios")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "000000000000000", "Rua Teste", "000000000000000", "joao@email.com"))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody(MensagemErroPadrao.class)
+                .returnResult().getResponseBody();
+
+        assertThat(resposta).isNotNull();
+        assertThat(resposta.getStatus()).isEqualTo(422);
+        assertThat(resposta.getError()).isEqualTo("Erro ao cadastrar funcionário");
+        assertThat(resposta.getMessage()).isEqualTo("Dados de entrada inválidos");
+        assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios");
+    }
+
+    @Test
     public void buscarPorId_ComIdValido_RetornaFuncionarioRespostaDtoStatus200(){
         FuncionarioRespostaDto resposta = testClient
                 .get()
