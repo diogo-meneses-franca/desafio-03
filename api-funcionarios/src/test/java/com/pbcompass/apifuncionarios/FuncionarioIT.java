@@ -1,10 +1,12 @@
 package com.pbcompass.apifuncionarios;
 
+import com.pbcompass.apifuncionarios.dto.FuncionarioCadastrarDto;
 import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
 import com.pbcompass.apifuncionarios.exception.MensagemErroPadrao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,6 +18,28 @@ public class FuncionarioIT {
 
     @Autowired
     WebTestClient testClient;
+
+    @Test
+    @Sql(scripts = "/sql/funcionarios/funcionarios-deletar.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void cadastrarFuncionario_ComDadosValidos_RetornaFuncionarioRespostaDtoStatus201(){
+        FuncionarioRespostaDto resposta = testClient
+                .post()
+                .uri("/api/v1/funcionarios")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "47276131076", "Rua Teste", "41999995888", "teste@email.com"))
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(FuncionarioRespostaDto.class)
+                .returnResult().getResponseBody();
+
+        assertThat(resposta).isNotNull();
+        assertThat(resposta.getId()).isNotNull();
+        assertThat(resposta.getNome()).isEqualTo("Funcionario");
+        assertThat(resposta.getCpf()).isEqualTo("47276131076");
+        assertThat(resposta.getEndereco()).isEqualTo("Rua Teste");
+        assertThat(resposta.getTelefone()).isEqualTo("41999995888");
+        assertThat(resposta.getEmail()).isEqualTo("teste@email.com");
+    }
 
     @Test
     public void buscarPorId_ComIdValido_RetornaFuncionarioRespostaDtoStatus200(){
