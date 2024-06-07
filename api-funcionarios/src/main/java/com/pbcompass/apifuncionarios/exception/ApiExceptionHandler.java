@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @ControllerAdvice
 @Slf4j
@@ -71,6 +72,17 @@ public class ApiExceptionHandler {
                         403,
                         "Erro ao atualizar funcionário",
                         "Não é possível alterar o CPF cadastrado",
+                        request.getRequestURI()));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<MensagemErroPadrao> noResourceFoundException(NoResourceFoundException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new MensagemErroPadrao(
+                        System.currentTimeMillis(),
+                        400,
+                        "Erro ao buscar funcionário",
+                        "Campo id vazio na requisição",
                         request.getRequestURI()));
     }
 
