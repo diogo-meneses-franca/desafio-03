@@ -45,7 +45,11 @@ public class FuncionarioController {
                     @ApiResponse(responseCode = "422",
                             description = "Dados de entrada inválidos",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
-                    )
+                    ),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
             }
     )
     @PostMapping
@@ -72,6 +76,10 @@ public class FuncionarioController {
                             description = "Funcionário com o id não encontrado",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
                     ),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
             }
     )
     @GetMapping("/{id}")
@@ -96,6 +104,10 @@ public class FuncionarioController {
                     @ApiResponse(
                             responseCode = "404",
                             description = "Funcionário com o id não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
                     ),
             }
@@ -133,6 +145,10 @@ public class FuncionarioController {
                             description = "Corpo requisição invalido",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
                     ),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
             }
     )
     @PutMapping("/{id}")
@@ -150,7 +166,11 @@ public class FuncionarioController {
                             description = "Sucesso",
                             responseCode = "200",
                             content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FuncionarioRespostaDto.class)))
-                    )
+                    ),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
             }
     )
     @GetMapping
