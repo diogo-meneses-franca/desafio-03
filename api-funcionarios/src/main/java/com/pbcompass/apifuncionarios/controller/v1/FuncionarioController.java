@@ -63,6 +63,11 @@ public class FuncionarioController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = FuncionarioRespostaDto.class))
                     ),
                     @ApiResponse(
+                            responseCode = "400",
+                            description = "Nenhum id inserido na busca",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
+                    @ApiResponse(
                             responseCode = "404",
                             description = "Funcionário com o id não encontrado",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
