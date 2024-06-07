@@ -89,18 +89,23 @@ public class FuncionarioController {
                             content = @Content
                     ),
                     @ApiResponse(
-                            responseCode = "404",
-                            description = "Funcionário com o id não encontrado",
+                            responseCode = "400",
+                            description = "Parâmetros inválidos",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Parâmetros inválidos",
+                            description = "Nenhum id inserido na requisição",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
-                    )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Funcionário com o id não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
             }
     )
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> excluir(@PathVariable Long id) {
         service.excluir(id);
         return ResponseEntity.noContent().build();
