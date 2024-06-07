@@ -7,12 +7,17 @@ import com.pbcompass.apifuncionarios.dto.FuncionarioCadastrarDto;
 import com.pbcompass.apifuncionarios.exception.MensagemErroPadrao;
 import com.pbcompass.apifuncionarios.services.FuncionarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +30,7 @@ public class FuncionarioController {
 
     private final FuncionarioService service;
 
-    @Operation(summary = "Cadastrar um novo funcionário",
+    @Operation(summary = "Cadastra um novo funcionário",
             responses = {
                     @ApiResponse(
                             description = "Funcionário cadastrado com sucesso",
@@ -122,5 +127,26 @@ public class FuncionarioController {
         Funcionario funcionario = FuncionarioMapper.toEntity(dto, Funcionario.class);
         FuncionarioRespostaDto resposta = FuncionarioMapper.toDto(service.editar(id, funcionario), FuncionarioRespostaDto.class);
         return ResponseEntity.ok(resposta);
+    }
+
+
+    @Operation(summary = "Busca todos os funcionários paginados",
+            responses = {
+                    @ApiResponse(
+                            description = "Sucesso",
+                            responseCode = "200",
+                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FuncionarioRespostaDto.class)))
+                    )
+            }
+    )
+    @GetMapping
+    public ResponseEntity<Page<FuncionarioRespostaDto>> buscarTodos(
+            @RequestParam(value = "page",defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "20") Integer size,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction){
+        var sordDirection = "desc".equalsIgnoreCase(direction) ?
+                Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sordDirection, "nome"));
+        return ResponseEntity.ok(service.buscarTodos(pageable));
     }
 }

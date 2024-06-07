@@ -1,5 +1,7 @@
 package com.pbcompass.apifuncionarios.services;
 
+import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
+import com.pbcompass.apifuncionarios.dto.mapper.FuncionarioMapper;
 import com.pbcompass.apifuncionarios.entities.Funcionario;
 import com.pbcompass.apifuncionarios.exception.DadosUnicosException;
 import com.pbcompass.apifuncionarios.exception.custom.AtualizacaoNaoPermitida;
@@ -8,6 +10,8 @@ import com.pbcompass.apifuncionarios.repository.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,5 +59,12 @@ public class FuncionarioService {
         } catch (DataIntegrityViolationException e) {
             throw new ErroAoSalvarFuncionario("Erro ao atualizar funcionário no banco de dados");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<FuncionarioRespostaDto> buscarTodos(Pageable pageable) {
+        Page<Funcionario> funcionarios = repository.findAll(pageable);
+        Page<FuncionarioRespostaDto> funcionariosDto = funcionarios.map(f -> FuncionarioMapper.toDto(f, FuncionarioRespostaDto.class));
+        return funcionariosDto;
     }
 }
