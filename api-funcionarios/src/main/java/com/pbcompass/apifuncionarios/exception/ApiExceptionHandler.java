@@ -1,6 +1,7 @@
 package com.pbcompass.apifuncionarios.exception;
 
 import com.pbcompass.apifuncionarios.exception.custom.AtualizacaoNaoPermitida;
+import com.pbcompass.apifuncionarios.exception.custom.RecursoNaoEncontrado;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,17 @@ public class ApiExceptionHandler {
                         422,
                         "Erro ao cadastrar funcionário",
                         "Dados de entrada inválidos",
+                        request.getRequestURI()));
+    }
+
+    @ExceptionHandler(RecursoNaoEncontrado.class)
+    public ResponseEntity<MensagemErroPadrao> recursoNaoEncontrado(RecursoNaoEncontrado ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new MensagemErroPadrao(
+                        System.currentTimeMillis(),
+                        400,
+                        "Erro ao buscar funcionário",
+                        "Campos vazios na requisição",
                         request.getRequestURI()));
     }
 
