@@ -137,6 +137,76 @@ public class FuncionarioIT {
     }
 
     @Test
+    public void editarFuncionario_ComDadosValidos_RetornarFuncionarioRespostaDtoStatus200() {
+        FuncionarioRespostaDto resposta = testClient
+                .put()
+                .uri("/api/v1/funcionarios/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario Teste Editado", "84319254007", "Rua Teste", "43999887766", "teste@email.com"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(FuncionarioRespostaDto.class)
+                .returnResult().getResponseBody();
+
+        assertThat(resposta).isNotNull();
+        assertThat(resposta.getId()).isNotNull();
+        assertThat(resposta.getNome()).isEqualTo("Funcionario Teste Editado");
+        assertThat(resposta.getCpf()).isEqualTo("84319254007");
+        assertThat(resposta.getEndereco()).isEqualTo("Rua Teste");
+        assertThat(resposta.getTelefone()).isEqualTo("43999887766");
+        assertThat(resposta.getEmail()).isEqualTo("teste@email.com");
+    }
+
+    @Test
+    public void editarFuncionario_ComIdInexistente_RetornarStatus404() {
+        MensagemErroPadrao resposta = testClient
+                .put()
+                .uri("/api/v1/funcionarios/10")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario Teste Editado", "84319254007", "Rua Teste", "43999887766", "teste@email.com"))
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody(MensagemErroPadrao.class)
+                .returnResult().getResponseBody();
+
+        assertThat(resposta).isNotNull();
+        assertThat(resposta.getStatus()).isEqualTo(404);
+        assertThat(resposta.getMessage()).isEqualTo("Funcionario com 'id=10' não encontrado");
+    }
+
+    @Test
+    public void editarFuncionario_ComDadosInvalidos_RetornarStatus400() {
+        MensagemErroPadrao resposta = testClient
+                .put()
+                .uri("/api/v1/funcionarios/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new FuncionarioCadastrarDto("", "", "", "", ""))
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody(MensagemErroPadrao.class)
+                .returnResult().getResponseBody();
+
+        assertThat(resposta).isNotNull();
+        assertThat(resposta.getStatus()).isEqualTo(400);
+    }
+
+    @Test
+    public void editarFuncionario_TentativaModificarCPF_RetornarStatus403() {
+        MensagemErroPadrao resposta = testClient
+                .put()
+                .uri("/api/v1/funcionarios/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario Teste Editado", "83011349096", "Rua Teste", "43999887766", "teste@email.com"))
+                .exchange()
+                .expectStatus().isForbidden()
+                .expectBody(MensagemErroPadrao.class)
+                .returnResult().getResponseBody();
+
+        assertThat(resposta).isNotNull();
+        assertThat(resposta.getStatus()).isEqualTo(403);
+    }
+
+    @Test
     public void deletar_ComIdExistente_RetornandoStatus204() {
         testClient
                 .delete()
