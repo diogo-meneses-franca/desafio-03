@@ -37,4 +37,21 @@ public class FuncionarioMapperTest {
         assertThat(testeDto.getEmail()).isEqualTo(FUNC_CADASTRAR_DTO.getEmail());
     }
 
+    @Test
+    public void toListDto_RetornarListaFuncionarioRespostaDto() {
+
+        FUNCIONARIO_LIST.add(FUNCIONARIO);
+
+        List<FuncionarioRespostaDto> testeList = FuncionarioMapper.toDtoList(FUNCIONARIO_LIST, FuncionarioRespostaDto.class);
+
+        FuncionarioRespostaDto dto = testeList.get(0);
+
+        assertThat(dto.getId()).isEqualTo(FUNCIONARIO.getId());
+        assertThat(dto.getNome()).isEqualTo(FUNCIONARIO.getNome());
+        assertThat(dto.getCpf()).isEqualTo(FUNCIONARIO.getCpf());
+        assertThat(dto.getEndereco()).isEqualTo(FUNCIONARIO.getEndereco());
+        assertThat(dto.getTelefone()).isEqualTo(FUNCIONARIO.getTelefone());
+        assertThat(dto.getEmail()).isEqualTo(FUNCIONARIO.getEmail());
+    }
+    
 }
