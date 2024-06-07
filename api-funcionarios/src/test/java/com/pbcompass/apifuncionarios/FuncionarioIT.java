@@ -2,7 +2,7 @@ package com.pbcompass.apifuncionarios;
 
 import com.pbcompass.apifuncionarios.dto.FuncionarioCadastrarDto;
 import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
-import com.pbcompass.apifuncionarios.exception.MensagemErroPadrao;
+import com.pbcompass.apifuncionarios.exception.custom.MensagemErroPadrao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

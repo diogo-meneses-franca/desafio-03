@@ -1,6 +1,9 @@
 package com.pbcompass.apifuncionarios.exception;
 
 import com.pbcompass.apifuncionarios.exception.custom.AtualizacaoNaoPermitida;
+import com.pbcompass.apifuncionarios.exception.custom.DadosUnicosException;
+import com.pbcompass.apifuncionarios.exception.custom.MensagemErroPadrao;
+import com.pbcompass.apifuncionarios.exception.custom.RecursoNaoEncontrado;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +52,17 @@ public class ApiExceptionHandler {
                         request.getRequestURI()));
     }
 
+    @ExceptionHandler(RecursoNaoEncontrado.class)
+    public ResponseEntity<MensagemErroPadrao> recursoNaoEncontrado(RecursoNaoEncontrado ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new MensagemErroPadrao(
+                        System.currentTimeMillis(),
+                        400,
+                        "Erro ao buscar funcionário",
+                        "Campos vazios na requisição",
+                        request.getRequestURI()));
+    }
+
     @ExceptionHandler(AtualizacaoNaoPermitida.class)
     public ResponseEntity<MensagemErroPadrao> atualizacaoNaoPermitida(AtualizacaoNaoPermitida ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
@@ -57,6 +71,17 @@ public class ApiExceptionHandler {
                         403,
                         "Erro ao atualizar funcionário",
                         "Não é possível alterar o CPF cadastrado",
+                        request.getRequestURI()));
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<MensagemErroPadrao> mensagemDeErroPadrao(RuntimeException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                new MensagemErroPadrao(
+                        System.currentTimeMillis(),
+                        500,
+                        "Internal Server Error",
+                        "Ocorreu um erro inesperado. Tente novamente mais tarde.",
                         request.getRequestURI()));
     }
 }
