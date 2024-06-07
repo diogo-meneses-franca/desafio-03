@@ -135,4 +135,31 @@ public class FuncionarioIT {
         assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios/3");
 
     }
+
+    @Test
+    public void deletar_ComIdExistente_RetornandoStatus204() {
+        testClient
+                .delete()
+                .uri("/api/v1/funcionarios/1")
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
+    @Test
+    public void deletar_ComIdInexistente_RetornandoStatus404() {
+        testClient
+                .delete()
+                .uri("/api/v1/funcionarios/999")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    public void deletar_ComIdInvalido_RetornandoStatus400() {
+        testClient
+                .delete()
+                .uri("/api/v1/funcionarios/abc")
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
 }
