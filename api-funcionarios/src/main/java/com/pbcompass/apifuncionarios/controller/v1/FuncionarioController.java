@@ -7,11 +7,13 @@ import com.pbcompass.apifuncionarios.dto.FuncionarioCadastrarDto;
 import com.pbcompass.apifuncionarios.exception.MensagemErroPadrao;
 import com.pbcompass.apifuncionarios.services.FuncionarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +31,7 @@ public class FuncionarioController {
 
     private final FuncionarioService service;
 
-    @Operation(summary = "Cadastrar um novo funcionário",
+    @Operation(summary = "Cadastra um novo funcionário",
             responses = {
                     @ApiResponse(
                             description = "Funcionário cadastrado com sucesso",
@@ -128,6 +130,16 @@ public class FuncionarioController {
         return ResponseEntity.ok(resposta);
     }
 
+
+    @Operation(summary = "Busca todos os funcionários paginados",
+            responses = {
+                    @ApiResponse(
+                            description = "Sucesso",
+                            responseCode = "200",
+                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FuncionarioRespostaDto.class)))
+                    )
+            }
+    )
     @GetMapping
     public ResponseEntity<Page<FuncionarioRespostaDto>> buscarTodos(
             @RequestParam(value = "page",defaultValue = "0") Integer page,
