@@ -1,6 +1,8 @@
 spring:
+  # configura cor no log do terminal
+  output.ansi.enabled: ALWAYS
   application:
-  name: servidor-eureka
+    name: servidor-eureka
 
 server:
   port: 8761
