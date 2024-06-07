@@ -109,7 +109,7 @@ public class FuncionarioController {
                             description = "Recurso alterado com sucesso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = FuncionarioRespostaDto.class))),
                     @ApiResponse(
-                            responseCode = "400",
+                            responseCode = "422",
                             description = "Corpo requisição invalido",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))),
                     @ApiResponse(

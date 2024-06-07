@@ -142,7 +142,7 @@ public class FuncionarioIT {
                 .put()
                 .uri("/api/v1/funcionarios/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("Funcionario Teste Editado", "84319254007", "Rua Teste", "43999887766", "teste@email.com"))
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario Teste Editado", "10498168387", "Rua Teste", "43999887766", "teste@email.com"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(FuncionarioRespostaDto.class)
@@ -151,7 +151,7 @@ public class FuncionarioIT {
         assertThat(resposta).isNotNull();
         assertThat(resposta.getId()).isNotNull();
         assertThat(resposta.getNome()).isEqualTo("Funcionario Teste Editado");
-        assertThat(resposta.getCpf()).isEqualTo("84319254007");
+        assertThat(resposta.getCpf()).isEqualTo("10498168387");
         assertThat(resposta.getEndereco()).isEqualTo("Rua Teste");
         assertThat(resposta.getTelefone()).isEqualTo("43999887766");
         assertThat(resposta.getEmail()).isEqualTo("teste@email.com");
@@ -171,23 +171,23 @@ public class FuncionarioIT {
 
         assertThat(resposta).isNotNull();
         assertThat(resposta.getStatus()).isEqualTo(404);
-        assertThat(resposta.getMessage()).isEqualTo("Funcionario com 'id=10' não encontrado");
+        assertThat(resposta.getMessage()).isEqualTo("Funcionario com o id 10 não encontrado");
     }
 
     @Test
-    public void editarFuncionario_ComDadosInvalidos_RetornarStatus400() {
+    public void editarFuncionario_ComDadosInvalidos_RetornarStatus422() {
         MensagemErroPadrao resposta = testClient
                 .put()
                 .uri("/api/v1/funcionarios/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new FuncionarioCadastrarDto("", "", "", "", ""))
                 .exchange()
-                .expectStatus().isBadRequest()
+                .expectStatus().isEqualTo(422)
                 .expectBody(MensagemErroPadrao.class)
                 .returnResult().getResponseBody();
 
         assertThat(resposta).isNotNull();
-        assertThat(resposta.getStatus()).isEqualTo(400);
+        assertThat(resposta.getStatus()).isEqualTo(422);
     }
 
     @Test
