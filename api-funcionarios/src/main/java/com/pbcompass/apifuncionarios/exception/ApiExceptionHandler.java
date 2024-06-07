@@ -30,7 +30,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(DadosUnicosException.class)
-    public ResponseEntity<MensagemErroPadrao> cpfUnicoException(DadosUnicosException ex, HttpServletRequest request) {
+    public ResponseEntity<MensagemErroPadrao> dadosUnicosException(DadosUnicosException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new MensagemErroPadrao(
                         System.currentTimeMillis(),
