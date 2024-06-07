@@ -1,5 +1,6 @@
 package com.pbcompass.apifuncionarios.exception;
 
+import com.pbcompass.apifuncionarios.exception.custom.AtualizacaoNaoPermitida;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,17 @@ public class ApiExceptionHandler {
                         422,
                         "Erro ao cadastrar funcionário",
                         "Dados de entrada inválidos",
+                        request.getRequestURI()));
+    }
+
+    @ExceptionHandler(AtualizacaoNaoPermitida.class)
+    public ResponseEntity<MensagemErroPadrao> atualizacaoNaoPermitida(AtualizacaoNaoPermitida ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                new MensagemErroPadrao(
+                        System.currentTimeMillis(),
+                        403,
+                        "Erro ao atualizar funcionário",
+                        "Não é possível alterar o CPF cadastrado",
                         request.getRequestURI()));
     }
 }

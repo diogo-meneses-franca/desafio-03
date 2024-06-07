@@ -107,6 +107,10 @@ public class FuncionarioController {
                             description = "Corpo requisição invalido",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))),
                     @ApiResponse(
+                            responseCode = "403",
+                            description = "Tentativa de modificar o CPF cadastrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(
                             responseCode = "404",
                             description = "Item a atualizar não encontrado",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))),
