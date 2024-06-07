@@ -64,7 +64,7 @@ public class FuncionarioController {
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Nenhum id inserido na busca",
+                            description = "Parâmetros inválidos",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
                     ),
                     @ApiResponse(
@@ -94,11 +94,6 @@ public class FuncionarioController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
                     ),
                     @ApiResponse(
-                            responseCode = "400",
-                            description = "Nenhum id inserido na requisição",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
-                    ),
-                    @ApiResponse(
                             responseCode = "404",
                             description = "Funcionário com o id não encontrado",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
@@ -116,19 +111,28 @@ public class FuncionarioController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Recurso alterado com sucesso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = FuncionarioRespostaDto.class))),
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = FuncionarioRespostaDto.class))
+                    ),
                     @ApiResponse(
-                            responseCode = "422",
-                            description = "Corpo requisição invalido",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))),
+                            responseCode = "400",
+                            description = "Parâmetros inválidos",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
                     @ApiResponse(
                             responseCode = "403",
                             description = "Tentativa de modificar o CPF cadastrado",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))),
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Item a atualizar não encontrado",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))),
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "422",
+                            description = "Corpo requisição invalido",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
             }
     )
     @PutMapping("/{id}")
