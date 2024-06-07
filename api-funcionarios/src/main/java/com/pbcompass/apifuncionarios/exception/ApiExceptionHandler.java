@@ -59,4 +59,15 @@ public class ApiExceptionHandler {
                         "Não é possível alterar o CPF cadastrado",
                         request.getRequestURI()));
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<MensagemErroPadrao> mensagemDeErroPadrao(RuntimeException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                new MensagemErroPadrao(
+                        System.currentTimeMillis(),
+                        500,
+                        "Internal Server Error",
+                        "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+                        request.getRequestURI()));
+    }
 }
