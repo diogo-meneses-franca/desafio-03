@@ -171,7 +171,7 @@ public class FuncionarioIT {
 
         assertThat(resposta).isNotNull();
         assertThat(resposta.getStatus()).isEqualTo(404);
-        assertThat(resposta.getMessage()).isEqualTo("funcionários com o id 10 não encontrado");
+        assertThat(resposta.getMessage()).isEqualTo("Funcionario com o id 10 não encontrado");
     }
 
     @Test
