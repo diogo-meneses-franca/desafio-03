@@ -20,7 +20,7 @@ public class FuncionarioService {
     @Transactional(readOnly = true)
     public Funcionario buscarPorId(Long id) {
         return repository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException(String.format("Funcionario com 'id=10' não encontrado", id)));
+                new EntityNotFoundException(String.format("funcionários com o id %d não encontrado", id)));
     }
 
     @Transactional
