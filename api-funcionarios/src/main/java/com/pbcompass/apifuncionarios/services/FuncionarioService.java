@@ -3,7 +3,7 @@ package com.pbcompass.apifuncionarios.services;
 import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
 import com.pbcompass.apifuncionarios.dto.mapper.FuncionarioMapper;
 import com.pbcompass.apifuncionarios.entities.Funcionario;
-import com.pbcompass.apifuncionarios.exception.DadosUnicosException;
+import com.pbcompass.apifuncionarios.exception.custom.DadosUnicosException;
 import com.pbcompass.apifuncionarios.exception.custom.AtualizacaoNaoPermitida;
 import com.pbcompass.apifuncionarios.exception.custom.ErroAoSalvarFuncionario;
 import com.pbcompass.apifuncionarios.repository.FuncionarioRepository;

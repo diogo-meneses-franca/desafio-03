@@ -1,4 +1,4 @@
-package com.pbcompass.apifuncionarios.exception;
+package com.pbcompass.apifuncionarios.exception.custom;
 
 public class DadosUnicosException extends RuntimeException {
 

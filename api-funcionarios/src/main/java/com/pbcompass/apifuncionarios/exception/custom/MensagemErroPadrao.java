@@ -1,4 +1,4 @@
-package com.pbcompass.apifuncionarios.exception;
+package com.pbcompass.apifuncionarios.exception.custom;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

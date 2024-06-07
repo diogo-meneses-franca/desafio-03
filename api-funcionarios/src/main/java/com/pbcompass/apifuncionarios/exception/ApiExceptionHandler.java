@@ -1,6 +1,8 @@
 package com.pbcompass.apifuncionarios.exception;
 
 import com.pbcompass.apifuncionarios.exception.custom.AtualizacaoNaoPermitida;
+import com.pbcompass.apifuncionarios.exception.custom.DadosUnicosException;
+import com.pbcompass.apifuncionarios.exception.custom.MensagemErroPadrao;
 import com.pbcompass.apifuncionarios.exception.custom.RecursoNaoEncontrado;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
