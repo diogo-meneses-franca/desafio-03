@@ -1,6 +1,6 @@
 package com.pbcompass.apipropostas.controller.v1;
 
-import com.pbcompass.apipropostas.repository.PropostaRepository;
+import com.pbcompass.apipropostas.services.PropostaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PropostaController {
 
-    private final PropostaRepository repository;
+    private final PropostaService service;
 }
