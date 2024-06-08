@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Tag(name = "Funcionários", description = "Contém todas as operações relativas ao cadastro, localização, edição e exclusão de alunos")
 @RestController
 @RequiredArgsConstructor
@@ -56,6 +58,7 @@ public class FuncionarioController {
     public ResponseEntity<FuncionarioRespostaDto> cadastrar(@RequestBody @Valid FuncionarioCadastrarDto dto) {
         Funcionario funcionario = FuncionarioMapper.toEntity(dto, Funcionario.class);
         FuncionarioRespostaDto resposta = FuncionarioMapper.toDto(service.cadastrar(funcionario), FuncionarioRespostaDto.class);
+        log.info("Novo funcionário criado.");
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
@@ -115,6 +118,7 @@ public class FuncionarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> excluir(@PathVariable Long id) {
         service.excluir(id);
+        log.info("Funcionário excluído da base de dados.");
         return ResponseEntity.noContent().build();
     }
 
@@ -173,6 +177,7 @@ public class FuncionarioController {
                     ),
             }
     )
+
     @GetMapping
     public ResponseEntity<Page<FuncionarioRespostaDto>> buscarTodos(
             @RequestParam(value = "page",defaultValue = "0") Integer page,
