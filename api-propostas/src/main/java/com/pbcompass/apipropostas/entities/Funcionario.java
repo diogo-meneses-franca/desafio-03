@@ -10,6 +10,10 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Embeddable
 public class Funcionario {
+
+        @EqualsAndHashCode.Include
+        @Column(name = "id_funcionario", nullable = false, unique = true)
+        private Long id;
         
         @Column(name = "nome_funcionario", nullable = false, length = 150)
         private String nome;
