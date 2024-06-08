@@ -1,4 +1,6 @@
 spring:
+  # configura cor no log do terminal
+  output.ansi.enabled: ALWAYS
   application:
     name: ms-funcionario
   jpa:
@@ -22,3 +24,11 @@ springdoc:
     path: /swagger-ui.html
   packages-to-scan: com.pbcompass.apifuncionarios.controller
 
+server:
+  port: 0
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
