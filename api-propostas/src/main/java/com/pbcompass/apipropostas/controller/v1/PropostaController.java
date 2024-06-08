@@ -1,6 +1,7 @@
 package com.pbcompass.apipropostas.controller.v1;
 
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
+import com.pbcompass.apipropostas.exception.MensagemErroPadrao;
 import com.pbcompass.apipropostas.repository.PropostaRepository;
 import com.pbcompass.apipropostas.services.PropostaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +32,7 @@ public class PropostaController {
                     @ApiResponse(
                             description = "Sucesso",
                             responseCode = "200",
-                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FuncionarioRespostaDto.class)))
+                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = PropostaRespostaDto.class)))
                     ),
                     @ApiResponse(responseCode = "500",
                             description = "Erro inesperado do servidor",
