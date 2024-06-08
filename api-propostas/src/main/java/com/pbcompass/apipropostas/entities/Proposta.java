@@ -31,7 +31,7 @@ public class Proposta {
     private Funcionario criador;
 
     @Column(name = "duracao")
-    private Integer duracao = 60000;
+    private Integer duracaoEmMinutos;
 
     private Date inicioVotacao;
 
