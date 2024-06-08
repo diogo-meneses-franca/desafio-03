@@ -1,7 +1,7 @@
 package com.pbcompass.apifuncionarios;
 
 import com.pbcompass.apifuncionarios.entities.Funcionario;
-import com.pbcompass.apifuncionarios.exception.DadosUnicosException;
+import com.pbcompass.apifuncionarios.exception.custom.DadosUnicosException;
 import com.pbcompass.apifuncionarios.repository.FuncionarioRepository;
 import com.pbcompass.apifuncionarios.services.FuncionarioService;
 import jakarta.persistence.EntityNotFoundException;
