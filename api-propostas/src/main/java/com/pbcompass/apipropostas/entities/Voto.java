@@ -17,8 +17,8 @@ public class Voto {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Embedded
-    private Funcionario votante;
+    @Column(name = "funcionario_id")
+    private Long funcionarioId;
 
     @ManyToOne
     @JoinColumn(name = "proposta_id", nullable = false)
