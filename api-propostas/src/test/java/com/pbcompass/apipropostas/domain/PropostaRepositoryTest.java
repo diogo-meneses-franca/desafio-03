@@ -48,4 +48,14 @@ public class PropostaRepositoryTest {
         assertThatThrownBy(() -> repository.save(PROPOSTA_INVALIDA)).isInstanceOf(RuntimeException.class);
     }
 
+    @Test
+    public void buscarProposta_ComIdExistente_RetorneOk() {
+        Proposta proposta = testEntityManager.persistFlushFind(PROPOSTA);
+
+        Optional<Proposta> propostaOpt = repository.findById(proposta.getId());
+
+        assertThat(propostaOpt).isNotEmpty();
+        assertThat(propostaOpt.get()).isEqualTo(proposta);
+    }
+
 }
