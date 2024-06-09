@@ -27,8 +27,8 @@ public class Proposta {
     @Column(name = "descricao")
     private String descricao;
 
-    @Embedded
-    private Funcionario criador;
+    @Column(name = "funcionario_id")
+    private Long funcionarioId;
 
     @Column(name = "duracao")
     private Integer duracaoEmMinutos;
