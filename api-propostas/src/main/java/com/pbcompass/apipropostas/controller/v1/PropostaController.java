@@ -1,5 +1,6 @@
 package com.pbcompass.apipropostas.controller.v1;
 
+import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
 import com.pbcompass.apipropostas.exception.MensagemErroPadrao;
 import com.pbcompass.apipropostas.services.PropostaService;
@@ -8,16 +9,14 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/propostas")
@@ -25,6 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class PropostaController {
 
     private final PropostaService service;
+
+    @PostMapping
+    public ResponseEntity<PropostaRespostaDto> cadastrar(@PathParam("funcionarioID") Long funcionarioId, @RequestBody PropostaCadastrarDto dto){
+        PropostaRespostaDto resposta = service.cadastrar(funcionarioId, dto);
+        return ResponseEntity.ok().body(resposta);
+    }
 
     @Operation(summary = "Busca todas as propostas paginadas",
             responses = {
