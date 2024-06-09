@@ -5,7 +5,6 @@ import com.pbcompass.apipropostas.dto.mapper.PropostaMapper;
 import com.pbcompass.apipropostas.entities.Proposta;
 import com.pbcompass.apipropostas.exception.custom.RecursoNaoEncontrado;
 import com.pbcompass.apipropostas.repository.PropostaRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
