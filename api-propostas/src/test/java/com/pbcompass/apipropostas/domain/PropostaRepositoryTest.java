@@ -58,4 +58,10 @@ public class PropostaRepositoryTest {
         assertThat(propostaOpt.get()).isEqualTo(proposta);
     }
 
+    @Test
+    public void buscarProposta_ComIdInexistente_RetorneNotFound() {
+        Optional<Proposta> propostaOpt = repository.findById(10L);
+
+        assertThat(propostaOpt).isEmpty();
+    }
 }
