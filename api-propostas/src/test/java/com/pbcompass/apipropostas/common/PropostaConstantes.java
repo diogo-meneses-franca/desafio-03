@@ -1,6 +1,5 @@
 package com.pbcompass.apipropostas.common;
 
-import com.pbcompass.apipropostas.entities.Funcionario;
 import com.pbcompass.apipropostas.entities.Proposta;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ public class PropostaConstantes {
           1L,
           "PropostaNome",
           "descrição da proposta",
-          new Funcionario(),
+          1L,
           1,
           new Date(),
           new ArrayList<>());
