@@ -7,6 +7,7 @@ import com.pbcompass.apipropostas.dto.mapper.MapperGenerico;
 import com.pbcompass.apipropostas.entities.Proposta;
 import com.pbcompass.apipropostas.exception.ErroAoBuscarFuncionarioException;
 import com.pbcompass.apipropostas.feign.FuncionarioFeignClient;
+import com.pbcompass.apipropostas.exception.custom.RecursoNaoEncontrado;
 import com.pbcompass.apipropostas.repository.PropostaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,12 @@ public class PropostaService {
 
     private final PropostaRepository repository;
     private final FuncionarioFeignClient feignClient;
+
+    @Transactional(readOnly = true)
+    public Proposta buscarPorId(Long id){
+        return repository.findById(id).orElseThrow(
+                ()-> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
+    }
 
     @Transactional(readOnly = true)
     public Page<PropostaRespostaDto> buscarTodos(Pageable pageable) {
@@ -46,4 +53,5 @@ public class PropostaService {
         resposta.setCriador(funcionarioRespostaDto);
         return resposta;
     }
+
 }
