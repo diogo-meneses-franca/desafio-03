@@ -1,0 +1,41 @@
+package com.pbcompass.apipropostas.domain;
+
+import static com.pbcompass.apipropostas.common.PropostaConstantes.PROPOSTA;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.pbcompass.apipropostas.entities.Proposta;
+import com.pbcompass.apipropostas.repository.PropostaRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+@DataJpaTest
+public class PropostaRepositoryTest {
+
+    @Autowired
+    private PropostaRepository repository;
+
+    @Autowired
+    private TestEntityManager testEntityManager;
+
+    @AfterEach
+    public void afterEach() {
+        PROPOSTA.setId(null);
+    }
+
+    @Test
+    public void criarProposta_ComDadosValidos_RetorneCreated() {
+        Proposta proposta = repository.save(PROPOSTA);
+
+        Proposta p = testEntityManager.find(Proposta.class, proposta.getId());
+
+        assertThat(p).isNotNull();
+        assertThat(p.getNome()).isEqualTo(PROPOSTA.getNome());
+        assertThat(p.getDescricao()).isEqualTo(PROPOSTA.getDescricao());
+        assertThat(p.getCriador()).isEqualTo(PROPOSTA.getCriador());
+        assertThat(p.getDuracaoEmMinutos()).isEqualTo(PROPOSTA.getDuracaoEmMinutos());
+        assertThat(p.getInicioVotacao()).isEqualTo(PROPOSTA.getInicioVotacao());
+    }
+}
