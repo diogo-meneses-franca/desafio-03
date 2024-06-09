@@ -39,4 +39,17 @@ public class ApiExceptionHandler {
                 )
         );
     }
+
+    @ExceptionHandler(ErroAoBuscarFuncionarioException.class)
+    public ResponseEntity<MensagemErroPadrao> erroAoBuscarFuncionarioException(ErroAoBuscarFuncionarioException e, HttpServletRequest request) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                new MensagemErroPadrao(
+                        new Date(),
+                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        e.getMessage(),
+                        request.getRequestURI()
+                )
+        );
+    }
 }
