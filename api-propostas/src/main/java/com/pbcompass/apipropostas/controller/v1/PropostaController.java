@@ -26,6 +26,29 @@ public class PropostaController {
 
     private final PropostaService service;
 
+    @Operation(summary = "Buscar uma proposta por id",
+            responses = {
+                    @ApiResponse(
+                            description = "Sucesso",
+                            responseCode = "200",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PropostaRespostaDto.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Parâmetros inválidos",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Proposta com o id não encontrada",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
+            }
+    )
     @GetMapping("/{id}")
     public ResponseEntity<PropostaRespostaDto> buscarPorId(@PathVariable Long id) {
         Proposta proposta = service.buscarPorId(id);
