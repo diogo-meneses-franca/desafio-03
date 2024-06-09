@@ -1,7 +1,9 @@
 package com.pbcompass.apipropostas.domain;
 
 import static com.pbcompass.apipropostas.common.PropostaConstantes.PROPOSTA;
+import static com.pbcompass.apipropostas.common.PropostaConstantes.PROPOSTA_INVALIDA;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.pbcompass.apipropostas.entities.Proposta;
 import com.pbcompass.apipropostas.repository.PropostaRepository;
@@ -10,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+import java.util.Optional;
 
 @DataJpaTest
 public class PropostaRepositoryTest {
@@ -38,4 +42,10 @@ public class PropostaRepositoryTest {
         assertThat(p.getDuracaoEmMinutos()).isEqualTo(PROPOSTA.getDuracaoEmMinutos());
         assertThat(p.getInicioVotacao()).isEqualTo(PROPOSTA.getInicioVotacao());
     }
+
+    @Test
+    public void criarProposta_ComDadosInvalidos_RetorneBadRequest() {
+        assertThatThrownBy(() -> repository.save(PROPOSTA_INVALIDA)).isInstanceOf(RuntimeException.class);
+    }
+
 }
