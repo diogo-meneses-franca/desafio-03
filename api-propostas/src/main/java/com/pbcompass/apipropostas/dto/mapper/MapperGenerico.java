@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PropostaMapper {
+public class MapperGenerico {
 
     public static <T, D> D toDto(T entity, Class<D> dtoClass) {
         return new ModelMapper().map(entity, dtoClass);

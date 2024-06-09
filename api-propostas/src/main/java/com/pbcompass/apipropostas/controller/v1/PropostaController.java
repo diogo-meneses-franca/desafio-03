@@ -1,7 +1,7 @@
 package com.pbcompass.apipropostas.controller.v1;
 
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
-import com.pbcompass.apipropostas.dto.mapper.PropostaMapper;
+import com.pbcompass.apipropostas.dto.mapper.MapperGenerico;
 import com.pbcompass.apipropostas.entities.Proposta;
 import com.pbcompass.apipropostas.exception.MensagemErroPadrao;
 import com.pbcompass.apipropostas.services.PropostaService;
@@ -52,7 +52,7 @@ public class PropostaController {
     @GetMapping("/{id}")
     public ResponseEntity<PropostaRespostaDto> buscarPorId(@PathVariable Long id) {
         Proposta proposta = service.buscarPorId(id);
-        PropostaRespostaDto resposta = PropostaMapper.toDto(proposta, PropostaRespostaDto.class);
+        PropostaRespostaDto resposta = MapperGenerico.toDto(proposta, PropostaRespostaDto.class);
         return ResponseEntity.status(HttpStatus.OK).body(resposta);
     }
 
