@@ -1,4 +1,4 @@
-package com.pbcompass.apipropostas.dto.mapper;
+package com.pbcompass.apipropostas.services.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
