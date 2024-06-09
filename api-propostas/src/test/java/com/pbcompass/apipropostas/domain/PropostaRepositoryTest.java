@@ -38,7 +38,7 @@ public class PropostaRepositoryTest {
         assertThat(p).isNotNull();
         assertThat(p.getNome()).isEqualTo(PROPOSTA.getNome());
         assertThat(p.getDescricao()).isEqualTo(PROPOSTA.getDescricao());
-        assertThat(p.getCriador()).isEqualTo(PROPOSTA.getCriador());
+        assertThat(p.getFuncionarioId()).isEqualTo(PROPOSTA.getFuncionarioId());
         assertThat(p.getDuracaoEmMinutos()).isEqualTo(PROPOSTA.getDuracaoEmMinutos());
         assertThat(p.getInicioVotacao()).isEqualTo(PROPOSTA.getInicioVotacao());
     }
