@@ -2,90 +2,37 @@ package com.pbcompass.apipropostas.controller.v1;
 
 import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
-import com.pbcompass.apipropostas.dto.mapper.MapperGenerico;
-import com.pbcompass.apipropostas.entities.Proposta;
-import com.pbcompass.apipropostas.exception.MensagemErroPadrao;
 import com.pbcompass.apipropostas.services.PropostaService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/propostas")
 @RequiredArgsConstructor
-public class PropostaControllerImpl {
+public class PropostaControllerImpl implements PropostaController {
 
     private final PropostaService service;
 
-    @PostMapping
-    public ResponseEntity<PropostaRespostaDto> cadastrar(@PathParam("funcionarioID") Long funcionarioId, @RequestBody PropostaCadastrarDto dto){
+    @Override
+    public ResponseEntity<PropostaRespostaDto> cadastrar(Long funcionarioId, PropostaCadastrarDto dto){
         PropostaRespostaDto resposta = service.cadastrar(funcionarioId, dto);
         return ResponseEntity.ok().body(resposta);
     }
 
-    @Operation(summary = "Buscar uma proposta por id",
-            responses = {
-                    @ApiResponse(
-                            description = "Sucesso",
-                            responseCode = "200",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PropostaRespostaDto.class))
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Parâmetros inválidos",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Proposta com o id não encontrada",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
-                    ),
-                    @ApiResponse(responseCode = "500",
-                            description = "Erro inesperado do servidor",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
-                    ),
-            }
-    )
-    @GetMapping("/{id}")
-    public ResponseEntity<PropostaRespostaDto> buscarPorId(@PathVariable Long id) {
-        Proposta proposta = service.buscarPorId(id);
-        PropostaRespostaDto resposta = MapperGenerico.toDto(proposta, PropostaRespostaDto.class);
+    @Override
+    public ResponseEntity<PropostaRespostaDto> buscarPorId(Long id) {
+        PropostaRespostaDto resposta = service.buscarPorId(id);
         return ResponseEntity.status(HttpStatus.OK).body(resposta);
     }
 
-    @Operation(summary = "Busca todas as propostas paginadas",
-            responses = {
-                    @ApiResponse(
-                            description = "Sucesso",
-                            responseCode = "200",
-                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = PropostaRespostaDto.class)))
-                    ),
-                    @ApiResponse(responseCode = "500",
-                            description = "Erro inesperado do servidor",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
-                    ),
-            }
-    )
-    @GetMapping
+    @Override
     public ResponseEntity<Page<PropostaRespostaDto>> buscarTodos(
-            @RequestParam(value = "page",defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "20") Integer size,
-            @RequestParam(value = "direction", defaultValue = "asc") String direction){
-        var sordDirection = "desc".equalsIgnoreCase(direction) ?
-                Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sordDirection, "nome"));
-        return ResponseEntity.ok(service.buscarTodos(pageable));
+            Integer page,
+            Integer size,
+            String direction){
+        return ResponseEntity.ok(service.buscarTodos(page, size, direction));
     }
 
 }
