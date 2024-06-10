@@ -91,7 +91,28 @@ public interface PropostaController {
     @GetMapping("/{id}")
     ResponseEntity<PropostaRespostaDto> buscarPorId(@PathVariable Long id);
 
-    @Operation(summary = "Busca todas as propostas paginadas",
+    @Operation(
+            summary = "Busca todas as propostas paginadas",
+            parameters = {
+                    @Parameter(
+                            name = "page",
+                            description = "numero da pagina",
+                            required = true,
+                            in = ParameterIn.QUERY,
+                            schema = @Schema(type = "Integer")),
+                    @Parameter(
+                            name = "size",
+                            description = "elementos por pagina",
+                            required = true,
+                            in = ParameterIn.QUERY,
+                            schema = @Schema(type = "Integer")),
+                    @Parameter(
+                            name = "direction",
+                            description = "direção da ordenação, asc para ascendente ou desc para descendente",
+                            required = true,
+                            in = ParameterIn.QUERY,
+                            schema = @Schema(type = "String"))
+            },
             responses = {
                     @ApiResponse(
                             description = "Sucesso",
@@ -113,7 +134,13 @@ public interface PropostaController {
             @RequestParam(value = "direction", defaultValue = "asc") String direction
     );
 
-    @Operation(summary = "Edita os dados de uma proposta",
+    @Operation(
+            summary = "Edita os dados de uma proposta",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Dados para edição de uma proposta",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = PropostaRespostaDto.class))
+            ),
             responses = {
                     @ApiResponse(
                             description = "Sucesso",
