@@ -9,11 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.Date;
 import java.util.Objects;
 
 @ControllerAdvice
@@ -24,7 +26,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<MensagemErroPadrao> entityNotFoundException(EntityNotFoundException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new MensagemErroPadrao(
-                        System.currentTimeMillis(),
+                        new Date(),
                         HttpStatus.NOT_FOUND.value(),
                         e.getMessage(),
                         request.getRequestURI()
@@ -36,7 +38,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<MensagemErroPadrao> dadosUnicosException(DadosUnicosException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new MensagemErroPadrao(
-                        System.currentTimeMillis(),
+                        new Date(),
                         HttpStatus.CONFLICT.value(),
                         ex.getMessage(),
                         request.getRequestURI()));
@@ -46,7 +48,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<MensagemErroPadrao> dadosDeEntradaInvalidosException(MethodArgumentNotValidException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(
                 new MensagemErroPadrao(
-                        System.currentTimeMillis(),
+                        new Date(),
                         HttpStatus.UNPROCESSABLE_ENTITY.value(),
                         Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage(),
                         request.getRequestURI()));
@@ -56,7 +58,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<MensagemErroPadrao> recursoNaoEncontrado(RecursoNaoEncontrado e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new MensagemErroPadrao(
-                        System.currentTimeMillis(),
+                        new Date(),
                         HttpStatus.BAD_REQUEST.value(),
                         e.getMessage(),
                         request.getRequestURI()));
@@ -66,7 +68,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<MensagemErroPadrao> atualizacaoNaoPermitida(AtualizacaoNaoPermitida e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                 new MensagemErroPadrao(
-                        System.currentTimeMillis(),
+                        new Date(),
                         HttpStatus.FORBIDDEN.value(),
                         e.getMessage(),
                         request.getRequestURI()));
@@ -76,7 +78,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<MensagemErroPadrao> noResourceFoundException(NoResourceFoundException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new MensagemErroPadrao(
-                        System.currentTimeMillis(),
+                        new Date(),
                         HttpStatus.NOT_FOUND.value(),
                         e.getMessage(),
                         request.getRequestURI()));
@@ -86,9 +88,19 @@ public class ApiExceptionHandler {
     public ResponseEntity<MensagemErroPadrao> mensagemDeErroPadrao(RuntimeException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new MensagemErroPadrao(
-                        System.currentTimeMillis(),
+                        new Date(),
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+                        request.getRequestURI()));
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<MensagemErroPadrao> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e, HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(
+                new MensagemErroPadrao(
+                        new Date(),
+                        HttpStatus.METHOD_NOT_ALLOWED.value(),
+                        "Método não permitido",
                         request.getRequestURI()));
     }
 }
