@@ -9,6 +9,7 @@ import com.pbcompass.apipropostas.exception.ErroAoBuscarFuncionarioException;
 import com.pbcompass.apipropostas.feign.FuncionarioFeignClient;
 import com.pbcompass.apipropostas.exception.custom.RecursoNaoEncontrado;
 import com.pbcompass.apipropostas.repository.PropostaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,9 +28,9 @@ public class PropostaService {
     private final FuncionarioFeignClient feignClient;
 
     @Transactional(readOnly = true)
-    public PropostaRespostaDto buscarPorId(Long id){
-        Proposta proposta =  repository.findById(id).orElseThrow(
-                ()-> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
+    public PropostaRespostaDto buscarPorId(Long id) {
+        Proposta proposta = repository.findById(id).orElseThrow(
+                () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
         PropostaRespostaDto resposta = MapperGenerico.toDto(proposta, PropostaRespostaDto.class);
         return resposta;
     }
@@ -50,9 +51,9 @@ public class PropostaService {
         Proposta proposta = MapperGenerico.toEntity(dto, Proposta.class);
         try {
             funcionarioRespostaDto = feignClient.buscarPorId(funcionarioId).getBody();
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             log.error(e.getMessage());
-            throw  new ErroAoBuscarFuncionarioException(String.format("Erro ao buscar funcionario com o id %d", funcionarioId));
+            throw new ErroAoBuscarFuncionarioException(String.format("Erro ao buscar funcionario com o id %d", funcionarioId));
         }
         proposta.setFuncionarioId(funcionarioId);
         Proposta propostaSalva = repository.save(proposta);
@@ -61,6 +62,7 @@ public class PropostaService {
         return resposta;
     }
 
+    @Transactional
     public PropostaRespostaDto editar(Long id, PropostaCadastrarDto dto) {
         PropostaRespostaDto proposta = buscarPorId(id);
         proposta.setNome(dto.getNome());
@@ -70,4 +72,14 @@ public class PropostaService {
         Proposta propostaSalva = repository.saveAndFlush(MapperGenerico.toEntity(proposta, Proposta.class));
         return proposta;
     }
+
+    @Transactional
+    public void excluir(Long id) {
+        log.info("Proposta excluida");
+
+        Proposta entidade = repository.findById(id).orElseThrow(
+                () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
+        repository.delete(entidade);
+    }
+
 }
