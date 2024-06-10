@@ -95,7 +95,7 @@ public interface FuncionarioController {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> excluir(@PathVariable Long id);
+    public ResponseEntity<Void> excluir(@PathVariable Long id);
 
 
     @Operation(summary = "Altera os dados de um funcionário",
