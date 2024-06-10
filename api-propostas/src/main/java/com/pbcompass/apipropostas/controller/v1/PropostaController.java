@@ -113,7 +113,7 @@ public interface PropostaController {
             @RequestParam(value = "direction", defaultValue = "asc") String direction
     );
 
-    @Operation(summary = "Busca todas as propostas paginadas",
+    @Operation(summary = "Edita os dados de uma proposta",
             responses = {
                     @ApiResponse(
                             description = "Sucesso",
@@ -134,11 +134,8 @@ public interface PropostaController {
                                     schema = @Schema(implementation = MensagemErroPadrao.class))),
             }
     )
-    @PutMapping("/{id}")
-    ResponseEntity<PropostaRespostaDto> editar(
-            @PathVariable Long id,
-            @RequestBody @Valid PropostaCadastrarDto dto
-    );
+    @PutMapping
+    ResponseEntity<PropostaRespostaDto> editar(@RequestBody @Valid PropostaCadastrarDto dto);
 
     @Operation(summary = "Deleta um Proposta pelo seu id",
             responses = {
