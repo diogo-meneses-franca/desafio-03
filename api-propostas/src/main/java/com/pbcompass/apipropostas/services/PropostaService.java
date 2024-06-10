@@ -33,7 +33,15 @@ public class PropostaService {
     public PropostaRespostaDto buscarPorId(Long id) {
         Proposta proposta = repository.findById(id).orElseThrow(
                 () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
+        FuncionarioRespostaDto funcionario;
+        try{
+            funcionario = feignClient.buscarPorId(proposta.getFuncionarioId()).getBody();
+        }catch (RuntimeException e) {
+            log.error(e.getMessage());
+            throw new ErroAoBuscarFuncionarioException(String.format("Erro ao buscar funcionario com o id %d", proposta.getFuncionarioId()));
+        }
         PropostaRespostaDto resposta = MapperGenerico.toDto(proposta, PropostaRespostaDto.class);
+        resposta.setCriador(funcionario);
         return resposta;
     }
 
