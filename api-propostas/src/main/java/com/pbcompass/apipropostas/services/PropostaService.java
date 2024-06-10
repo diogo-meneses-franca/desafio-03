@@ -19,6 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -49,6 +51,12 @@ public class PropostaService {
     public PropostaRespostaDto cadastrar(Long funcionarioId, PropostaCadastrarDto dto) {
         FuncionarioRespostaDto funcionarioRespostaDto;
         Proposta proposta = MapperGenerico.toEntity(dto, Proposta.class);
+        if (proposta.getInicioVotacao() == null){
+            proposta.setInicioVotacao(new Date());
+        }
+        if (proposta.getDuracaoEmMinutos() == null){
+            proposta.setDuracaoEmMinutos(1);
+        }
         try {
             funcionarioRespostaDto = feignClient.buscarPorId(funcionarioId).getBody();
         } catch (RuntimeException e) {
