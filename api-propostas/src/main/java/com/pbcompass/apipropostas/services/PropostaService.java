@@ -74,15 +74,17 @@ public class PropostaService {
         if(!proposta.getCriador().equals(dto.getCriador())) {
             throw new CriadorUnicoException("O criador da proposta não pode ser alterado");
         }
-        Proposta propostaSalva = repository.saveAndFlush(MapperGenerico.toEntity(dto, Proposta.class));
+        Proposta aSalvar = MapperGenerico.toEntity(dto, Proposta.class);
+        aSalvar.setFuncionarioId(dto.getCriador().getId());
+        Proposta propostaSalva = repository.save(aSalvar);
         PropostaRespostaDto resposta = MapperGenerico.toDto(propostaSalva, PropostaRespostaDto.class);
+        FuncionarioRespostaDto criador = buscarFuncionarioPorId(propostaSalva.getFuncionarioId());
+        resposta.setCriador(criador);
         return resposta;
     }
 
     @Transactional
     public void excluir(Long id) {
-        log.info("Proposta excluida");
-
         Proposta entidade = repository.findById(id).orElseThrow(
                 () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
         repository.delete(entidade);
