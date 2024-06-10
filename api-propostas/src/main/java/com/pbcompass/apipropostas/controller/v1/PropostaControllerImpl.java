@@ -18,20 +18,20 @@ public class PropostaControllerImpl implements PropostaController {
     @Override
     public ResponseEntity<PropostaRespostaDto> cadastrar(Long funcionarioId, PropostaCadastrarDto dto){
         PropostaRespostaDto resposta = service.cadastrar(funcionarioId, dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
+        return ResponseEntity.ok(resposta);
     }
 
     @Override
     public ResponseEntity<PropostaRespostaDto> buscarPorId(Long id) {
         PropostaRespostaDto resposta = service.buscarPorId(id);
-        return ResponseEntity.status(HttpStatus.OK).body(resposta);
+        return ResponseEntity.ok(resposta);
     }
 
     @Override
     public ResponseEntity<Page<PropostaRespostaDto>> buscarTodos(
             Integer page,
             Integer size,
-            String direction){
+            String direction) {
         return ResponseEntity.ok(service.buscarTodos(page, size, direction));
     }
 
@@ -41,5 +41,10 @@ public class PropostaControllerImpl implements PropostaController {
         return ResponseEntity.ok(resposta);
     }
 
+    @Override
+    public ResponseEntity<Void> delete(Long id) {
+        service.excluir(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
