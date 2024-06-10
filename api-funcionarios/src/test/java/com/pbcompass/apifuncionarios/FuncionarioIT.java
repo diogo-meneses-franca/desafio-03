@@ -96,6 +96,24 @@ public class FuncionarioIT {
     }
 
     @Test
+    public void cadastrarFuncionario_ComTelefoneInvalido_RetornarMensagemErroPadraoStatus422(){
+        MensagemErroPadrao resposta = testClient
+                .post()
+                .uri("/api/v1/funcionarios")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "31939422000", "Rua Teste", "000000000000000", "joao@email.com"))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody(MensagemErroPadrao.class)
+                .returnResult().getResponseBody();
+
+        assertThat(resposta).isNotNull();
+        assertThat(resposta.getStatus()).isEqualTo(422);
+        assertThat(resposta.getMessage()).isEqualTo("Telefone deve possuir entre 10 e 14 caracteres");
+        assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios");
+    }
+
+    @Test
     public void buscarPorId_ComIdValido_RetornaFuncionarioRespostaDtoStatus200(){
         FuncionarioRespostaDto resposta = testClient
                 .get()
