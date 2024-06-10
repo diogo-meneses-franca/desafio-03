@@ -86,4 +86,8 @@ public interface PropostaController {
     )
     @PutMapping("/{id}")
     ResponseEntity<PropostaRespostaDto> editar(@PathVariable Long id, @RequestBody @Valid PropostaCadastrarDto dto);
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> delete(@PathVariable Long id);
+
 }
