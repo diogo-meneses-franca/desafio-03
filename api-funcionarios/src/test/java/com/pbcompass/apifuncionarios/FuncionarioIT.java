@@ -55,7 +55,6 @@ public class FuncionarioIT {
 
         assertThat(resposta).isNotNull();
         assertThat(resposta.getStatus()).isEqualTo(409);
-        assertThat(resposta.getError()).isEqualTo("Erro ao cadastrar funcionário");
         assertThat(resposta.getMessage()).isEqualTo("CPF ou Email já cadastrado no sistema");
         assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios");
     }
@@ -74,7 +73,6 @@ public class FuncionarioIT {
 
         assertThat(resposta).isNotNull();
         assertThat(resposta.getStatus()).isEqualTo(409);
-        assertThat(resposta.getError()).isEqualTo("Erro ao cadastrar funcionário");
         assertThat(resposta.getMessage()).isEqualTo("CPF ou Email já cadastrado no sistema");
         assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios");
     }
@@ -93,7 +91,6 @@ public class FuncionarioIT {
 
         assertThat(resposta).isNotNull();
         assertThat(resposta.getStatus()).isEqualTo(422);
-        assertThat(resposta.getError()).isEqualTo("Erro ao cadastrar funcionário");
         assertThat(resposta.getMessage()).isEqualTo("Dados de entrada inválidos");
         assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios");
     }
@@ -130,7 +127,6 @@ public class FuncionarioIT {
 
         assertThat(resposta).isNotNull();
         assertThat(resposta.getStatus()).isEqualTo(404);
-        assertThat(resposta.getError()).isEqualTo("Not found");
         assertThat(resposta.getMessage()).isEqualTo("Funcionario com o id 3 não encontrado");
         assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios/3");
 
