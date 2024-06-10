@@ -61,20 +61,16 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public Funcionario editar(Long id, Funcionario funcionario) {
-        log.info("Funcionário editado com sucesso");
-
+    public FuncionarioRespostaDto editar(FuncionarioRespostaDto dto) {
         try {
-            Funcionario entidade = MapperGenerico.toEntity(buscarPorId(id), Funcionario.class);
-            if (!entidade.getCpf().equals(funcionario.getCpf())) {
+            FuncionarioRespostaDto entidade = buscarPorId(dto.getId());
+            if (!entidade.getCpf().equals(dto.getCpf())) {
                 throw new AtualizacaoNaoPermitida("Não é possível alterar o CPF cadastrado");
             }
-
-            entidade.setNome(funcionario.getNome());
-            entidade.setEndereco(funcionario.getEndereco());
-            entidade.setTelefone(funcionario.getTelefone());
-            entidade.setEmail(funcionario.getEmail());
-            return repository.saveAndFlush(entidade);
+            Funcionario funcionario = MapperGenerico.toEntity(dto, Funcionario.class);
+            Funcionario editado = repository.saveAndFlush(funcionario);
+            FuncionarioRespostaDto resposta = MapperGenerico.toDto(editado, FuncionarioRespostaDto.class);
+            return resposta;
 
         } catch (DataIntegrityViolationException e) {
             throw new ErroAoSalvarFuncionario("Erro ao atualizar funcionário no banco de dados");
