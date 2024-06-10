@@ -36,8 +36,8 @@ public class PropostaControllerImpl implements PropostaController {
     }
 
     @Override
-    public ResponseEntity<PropostaRespostaDto> editar(Long id, PropostaCadastrarDto dto) {
-        PropostaRespostaDto resposta = service.editar(id, dto);
+    public ResponseEntity<PropostaRespostaDto> editar(PropostaRespostaDto dto) {
+        PropostaRespostaDto resposta = service.editar(dto);
         return ResponseEntity.ok(resposta);
     }
 
