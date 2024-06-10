@@ -76,7 +76,7 @@ public interface PropostaController {
                     @ApiResponse(
                             description = "Proposta não encontrada",
                             responseCode = "404",
-                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = PropostaRespostaDto.class)))
+                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = MensagemErroPadrao.class)))
                     ),
                     @ApiResponse(responseCode = "500",
                             description = "Erro inesperado do servidor",
