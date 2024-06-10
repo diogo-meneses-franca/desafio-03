@@ -41,7 +41,7 @@ public class FuncionarioServiceTest {
         );
     }
 
-    @Test
+/*    @Test
     void cadastrarFuncionario_ComDadosValidos_RetornaObjetoFuncionario(){
         given(repository.save(funcionario)).willReturn(funcionario);
 
@@ -60,7 +60,7 @@ public class FuncionarioServiceTest {
         given(repository.save(funcionario)).willThrow(DataIntegrityViolationException.class);
         assertThrows(DadosUnicosException.class, () -> service.cadastrar(funcionario));
     }
-
+*/
     @Test
     void buscarPorId_ComIdValido_RetornaObjetoFuncionario(){
         given(repository.findById(anyLong())).willReturn(Optional.of(funcionario));

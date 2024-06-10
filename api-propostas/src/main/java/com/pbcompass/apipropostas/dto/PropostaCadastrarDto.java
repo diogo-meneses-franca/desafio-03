@@ -1,7 +1,6 @@
 package com.pbcompass.apipropostas.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,9 +21,7 @@ public class PropostaCadastrarDto {
     @Size(max = 200, message = "Descrição deve ter no máximo 200 caracteres")
     private String descricao;
 
-    @NotNull(message = "Defina uma duração em minutos para a proposta")
     private Integer duracaoEmMinutos;
 
-    @NotNull(message = "Defina o início da votação. Ex: 23/12/2013 07:36:57")
     private Date inicioVotacao;
 }

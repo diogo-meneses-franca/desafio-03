@@ -19,10 +19,8 @@ public class ApiGatewayApplication {
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("ms-funcionario", r -> r.path("/api/v1/funcionarios/**")
-                        .uri("lb://ms-funcionario"))
-                .route("api-propostas", r -> r.path("/api/v1/propostas/**")
-                        .uri("lb://api-propostas"))
+                .route(r -> r.path("/api/v1/funcionarios/**").uri("lb://ms-funcionario"))
+                .route(r -> r.path("/api/v1/propostas/**").uri("lb://ms-propostas"))
                 .build();
     }
 
