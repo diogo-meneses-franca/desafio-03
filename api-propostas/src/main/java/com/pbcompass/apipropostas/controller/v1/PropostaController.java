@@ -135,7 +135,7 @@ public interface PropostaController {
             }
     )
     @PutMapping
-    ResponseEntity<PropostaRespostaDto> editar(@RequestBody @Valid PropostaCadastrarDto dto);
+    ResponseEntity<PropostaRespostaDto> editar(@RequestBody @Valid PropostaRespostaDto dto);
 
     @Operation(summary = "Deleta um Proposta pelo seu id",
             responses = {
