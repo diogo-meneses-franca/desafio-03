@@ -74,7 +74,7 @@ public class PropostaService {
     @Transactional
     public PropostaRespostaDto editar(PropostaRespostaDto dto) {
         PropostaRespostaDto proposta = buscarPorId(dto.getId());
-        if(!proposta.getCriador().getId().equals(dto.getCriador().getId())) {
+        if(!proposta.getCriador().equals(dto.getCriador())) {
             throw new CriadorUnicoException("O criador da proposta não pode ser alterado");
         }
         Proposta propostaSalva = repository.saveAndFlush(MapperGenerico.toEntity(dto, Proposta.class));
