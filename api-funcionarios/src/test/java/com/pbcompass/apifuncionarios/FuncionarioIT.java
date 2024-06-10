@@ -192,9 +192,9 @@ public class FuncionarioIT {
     public void editarFuncionario_ComDadosInvalidos_RetornarStatus422() {
         MensagemErroPadrao resposta = testClient
                 .put()
-                .uri("/api/v1/funcionarios/1")
+                .uri("/api/v1/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("", "", "", "", ""))
+                .bodyValue(new FuncionarioRespostaDto(0L, "", "", "", "", ""))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(MensagemErroPadrao.class)
