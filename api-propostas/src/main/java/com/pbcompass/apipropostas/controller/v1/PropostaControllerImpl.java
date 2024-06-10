@@ -35,4 +35,11 @@ public class PropostaControllerImpl implements PropostaController {
         return ResponseEntity.ok(service.buscarTodos(page, size, direction));
     }
 
+    @Override
+    public ResponseEntity<PropostaRespostaDto> editar(Long id, PropostaCadastrarDto dto) {
+        PropostaRespostaDto resposta = service.editar(id, dto);
+        return ResponseEntity.ok(resposta);
+    }
+
+
 }

@@ -61,4 +61,13 @@ public class PropostaService {
         return resposta;
     }
 
+    public PropostaRespostaDto editar(Long id, PropostaCadastrarDto dto) {
+        PropostaRespostaDto proposta = buscarPorId(id);
+        proposta.setNome(dto.getNome());
+        proposta.setDescricao(dto.getDescricao());
+        proposta.setDuracaoEmMinutos(dto.getDuracaoEmMinutos());
+        proposta.setInicioVotacao(dto.getInicioVotacao());
+        Proposta propostaSalva = repository.saveAndFlush(MapperGenerico.toEntity(proposta, Proposta.class));
+        return proposta;
+    }
 }

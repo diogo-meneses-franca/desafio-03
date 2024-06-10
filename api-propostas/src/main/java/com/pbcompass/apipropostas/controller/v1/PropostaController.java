@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -65,4 +66,24 @@ public interface PropostaController {
         @RequestParam(value = "size", defaultValue = "20") Integer size,
         @RequestParam(value = "direction", defaultValue = "asc") String direction);
 
+    @Operation(summary = "Busca todas as propostas paginadas",
+            responses = {
+                    @ApiResponse(
+                            description = "Sucesso",
+                            responseCode = "200",
+                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = PropostaRespostaDto.class)))
+                    ),
+                    @ApiResponse(
+                            description = "Proposta não encontrada",
+                            responseCode = "404",
+                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = PropostaRespostaDto.class)))
+                    ),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))
+                    ),
+            }
+    )
+    @PutMapping("/{id}")
+    ResponseEntity<PropostaRespostaDto> editar(@PathVariable Long id, @RequestBody @Valid PropostaCadastrarDto dto);
 }
