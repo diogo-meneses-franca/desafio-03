@@ -1,5 +1,6 @@
 package com.pbcompass.apipropostas.exception;
 
+import com.pbcompass.apipropostas.exception.custom.CriadorUnicoException;
 import com.pbcompass.apipropostas.exception.custom.RecursoNaoEncontrado;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,19 @@ public class ApiExceptionHandler {
                         new Date(),
                         HttpStatus.UNPROCESSABLE_ENTITY.value(),
                         Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage(),
+                        request.getRequestURI()
+                )
+        );
+    }
+
+    @ExceptionHandler(CriadorUnicoException.class)
+    public ResponseEntity<MensagemErroPadrao> criadorUnicoException(CriadorUnicoException e, HttpServletRequest request) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new MensagemErroPadrao(
+                        new Date(),
+                        HttpStatus.BAD_REQUEST.value(),
+                        "O criador da proposta não pode ser alterado",
                         request.getRequestURI()
                 )
         );
