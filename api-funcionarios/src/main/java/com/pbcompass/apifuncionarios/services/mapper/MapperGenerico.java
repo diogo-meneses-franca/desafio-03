@@ -1,4 +1,4 @@
-package com.pbcompass.apifuncionarios.dto.mapper;
+package com.pbcompass.apifuncionarios.services.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class FuncionarioMapper {
+public class MapperGenerico {
 
     public static <T, D> D toDto(T entity, Class<D> dtoClass) {
         return new ModelMapper().map(entity, dtoClass);

@@ -1,5 +1,6 @@
 package com.pbcompass.apifuncionarios;
 
+import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
 import com.pbcompass.apifuncionarios.entities.Funcionario;
 import com.pbcompass.apifuncionarios.exception.custom.DadosUnicosException;
 import com.pbcompass.apifuncionarios.repository.FuncionarioRepository;
@@ -63,7 +64,7 @@ public class FuncionarioServiceTest {
     @Test
     void buscarPorId_ComIdValido_RetornaObjetoFuncionario(){
         given(repository.findById(anyLong())).willReturn(Optional.of(funcionario));
-        Funcionario funcionarioSalvo = service.buscarPorId(funcionario.getId());
+        FuncionarioRespostaDto funcionarioSalvo = service.buscarPorId(funcionario.getId());
 
         assertNotNull(funcionarioSalvo);
         assertEquals(funcionario.getId(), funcionarioSalvo.getId());

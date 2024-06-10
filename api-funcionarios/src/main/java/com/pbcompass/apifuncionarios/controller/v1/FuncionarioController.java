@@ -1,11 +1,8 @@
 package com.pbcompass.apifuncionarios.controller.v1;
 
-import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
-import com.pbcompass.apifuncionarios.dto.mapper.FuncionarioMapper;
-import com.pbcompass.apifuncionarios.entities.Funcionario;
 import com.pbcompass.apifuncionarios.dto.FuncionarioCadastrarDto;
+import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
 import com.pbcompass.apifuncionarios.exception.custom.MensagemErroPadrao;
-import com.pbcompass.apifuncionarios.services.FuncionarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,24 +10,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @Tag(name = "Funcionários", description = "Contém todas as operações relativas ao cadastro, localização, edição e exclusão de alunos")
-@RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/funcionarios")
-public class FuncionarioController {
+public interface FuncionarioController {
 
-    private final FuncionarioService service;
 
     @Operation(summary = "Cadastra um novo funcionário",
             responses = {
@@ -55,12 +42,8 @@ public class FuncionarioController {
             }
     )
     @PostMapping
-    public ResponseEntity<FuncionarioRespostaDto> cadastrar(@RequestBody @Valid FuncionarioCadastrarDto dto) {
-        Funcionario funcionario = FuncionarioMapper.toEntity(dto, Funcionario.class);
-        FuncionarioRespostaDto resposta = FuncionarioMapper.toDto(service.cadastrar(funcionario), FuncionarioRespostaDto.class);
-        log.info("Novo funcionário criado.");
-        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
-    }
+    public ResponseEntity<FuncionarioRespostaDto> cadastrar(@RequestBody @Valid FuncionarioCadastrarDto dto);
+
 
     @Operation(summary = "Buscar um funcionário pelo seu id",
             responses = {
@@ -86,11 +69,7 @@ public class FuncionarioController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<FuncionarioRespostaDto> buscarPorId(@PathVariable Long id) {
-        Funcionario funcionario = service.buscarPorId(id);
-        FuncionarioRespostaDto resposta = FuncionarioMapper.toDto(funcionario, FuncionarioRespostaDto.class);
-        return ResponseEntity.status(HttpStatus.OK).body(resposta);
-    }
+    public ResponseEntity<FuncionarioRespostaDto> buscarPorId(@PathVariable Long id);
 
     @Operation(summary = "Deleta um funcionário pelo seu id",
             responses = {
@@ -116,11 +95,8 @@ public class FuncionarioController {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> excluir(@PathVariable Long id) {
-        service.excluir(id);
-        log.info("Funcionário excluído da base de dados.");
-        return ResponseEntity.noContent().build();
-    }
+    public ResponseEntity<Void> excluir(@PathVariable Long id);
+
 
     @Operation(summary = "Altera os dados de um funcionário",
             responses = {
@@ -157,11 +133,7 @@ public class FuncionarioController {
     )
     @PutMapping("/{id}")
     public ResponseEntity<FuncionarioRespostaDto> editar(@PathVariable Long id,
-                                                         @Valid @RequestBody FuncionarioCadastrarDto dto){
-        Funcionario funcionario = FuncionarioMapper.toEntity(dto, Funcionario.class);
-        FuncionarioRespostaDto resposta = FuncionarioMapper.toDto(service.editar(id, funcionario), FuncionarioRespostaDto.class);
-        return ResponseEntity.ok(resposta);
-    }
+                                                         @Valid @RequestBody FuncionarioCadastrarDto dto);
 
 
     @Operation(summary = "Busca todos os funcionários paginados",
@@ -177,15 +149,9 @@ public class FuncionarioController {
                     ),
             }
     )
-
     @GetMapping
     public ResponseEntity<Page<FuncionarioRespostaDto>> buscarTodos(
-            @RequestParam(value = "page",defaultValue = "0") Integer page,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "20") Integer size,
-            @RequestParam(value = "direction", defaultValue = "asc") String direction){
-        var sordDirection = "desc".equalsIgnoreCase(direction) ?
-                Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sordDirection, "nome"));
-        return ResponseEntity.ok(service.buscarTodos(pageable));
-    }
+            @RequestParam(value = "direction", defaultValue = "asc") String direction);
 }
