@@ -175,9 +175,9 @@ public class FuncionarioIT {
     public void editarFuncionario_ComIdInexistente_RetornarStatus404() {
         MensagemErroPadrao resposta = testClient
                 .put()
-                .uri("/api/v1/funcionarios/10")
+                .uri("/api/v1/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("Funcionario Teste Editado", "84319254007", "Rua Teste", "43999887766", "teste@email.com"))
+                .bodyValue(new FuncionarioRespostaDto(10L, "Funcionario Teste Editado", "84319254007", "Rua Teste", "43999887766", "teste@email.com"))
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(MensagemErroPadrao.class)
