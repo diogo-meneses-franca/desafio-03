@@ -3,6 +3,7 @@ package com.pbcompass.apipropostas.services;
 import com.pbcompass.apipropostas.dto.FuncionarioRespostaDto;
 import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
+import com.pbcompass.apipropostas.exception.custom.CriadorUnicoException;
 import com.pbcompass.apipropostas.services.mapper.MapperGenerico;
 import com.pbcompass.apipropostas.entities.Proposta;
 import com.pbcompass.apipropostas.exception.ErroAoBuscarFuncionarioException;
@@ -71,14 +72,14 @@ public class PropostaService {
     }
 
     @Transactional
-    public PropostaRespostaDto editar(Long id, PropostaCadastrarDto dto) {
-        PropostaRespostaDto proposta = buscarPorId(id);
-        proposta.setNome(dto.getNome());
-        proposta.setDescricao(dto.getDescricao());
-        proposta.setDuracaoEmMinutos(dto.getDuracaoEmMinutos());
-        proposta.setInicioVotacao(dto.getInicioVotacao());
-        Proposta propostaSalva = repository.saveAndFlush(MapperGenerico.toEntity(proposta, Proposta.class));
-        return proposta;
+    public PropostaRespostaDto editar(PropostaRespostaDto dto) {
+        PropostaRespostaDto proposta = buscarPorId(dto.getId());
+        if(!proposta.getCriador().getId().equals(dto.getCriador().getId())) {
+            throw new CriadorUnicoException("O criador da proposta não pode ser alterado");
+        }
+        Proposta propostaSalva = repository.saveAndFlush(MapperGenerico.toEntity(dto, Proposta.class));
+        PropostaRespostaDto resposta = MapperGenerico.toDto(propostaSalva, PropostaRespostaDto.class);
+        return resposta;
     }
 
     @Transactional
