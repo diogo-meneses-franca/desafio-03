@@ -78,12 +78,12 @@ public class FuncionarioIT {
     }
 
     @Test
-    public void cadastrarFuncionario_ComDadosInvalidos_RetornarMensagemErroPadraoStatus422(){
+    public void cadastrarFuncionario_ComCpfInvalido_RetornarMensagemErroPadraoStatus422(){
         MensagemErroPadrao resposta = testClient
                 .post()
                 .uri("/api/v1/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "000000000000000", "Rua Teste", "000000000000000", "joao@email.com"))
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "000000000000000", "Rua Teste", "43995122788", "joao@email.com"))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(MensagemErroPadrao.class)
@@ -91,7 +91,7 @@ public class FuncionarioIT {
 
         assertThat(resposta).isNotNull();
         assertThat(resposta.getStatus()).isEqualTo(422);
-        assertThat(resposta.getMessage()).isEqualTo("Dados de entrada inválidos");
+        assertThat(resposta.getMessage()).isEqualTo("número do registro de contribuinte individual brasileiro (CPF) inválido");
         assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios");
     }
 
