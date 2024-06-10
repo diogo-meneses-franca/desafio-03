@@ -154,16 +154,16 @@ public class FuncionarioIT {
     public void editarFuncionario_ComDadosValidos_RetornarFuncionarioRespostaDtoStatus200() {
         FuncionarioRespostaDto resposta = testClient
                 .put()
-                .uri("/api/v1/funcionarios/1")
+                .uri("/api/v1/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("Funcionario Teste Editado", "10498168387", "Rua Teste", "43999887766", "teste@email.com"))
+                .bodyValue(new FuncionarioRespostaDto(1L, "Funcionario Teste Editado", "10498168387", "Rua Teste", "43999887766", "teste@email.com"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(FuncionarioRespostaDto.class)
                 .returnResult().getResponseBody();
 
         assertThat(resposta).isNotNull();
-        assertThat(resposta.getId()).isNotNull();
+        assertThat(resposta.getId()).isEqualTo(1L);
         assertThat(resposta.getNome()).isEqualTo("Funcionario Teste Editado");
         assertThat(resposta.getCpf()).isEqualTo("10498168387");
         assertThat(resposta.getEndereco()).isEqualTo("Rua Teste");
