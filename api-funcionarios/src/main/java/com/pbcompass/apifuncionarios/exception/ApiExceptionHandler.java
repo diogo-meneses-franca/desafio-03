@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.Objects;
+
 @ControllerAdvice
 @Slf4j
 public class ApiExceptionHandler {
@@ -24,7 +26,6 @@ public class ApiExceptionHandler {
                 new MensagemErroPadrao(
                         System.currentTimeMillis(),
                         HttpStatus.NOT_FOUND.value(),
-                        "Not found",
                         e.getMessage(),
                         request.getRequestURI()
                 )
@@ -36,63 +37,57 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new MensagemErroPadrao(
                         System.currentTimeMillis(),
-                        409,
-                        "Erro ao cadastrar funcionário",
+                        HttpStatus.CONFLICT.value(),
                         ex.getMessage(),
                         request.getRequestURI()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<MensagemErroPadrao> dadosDeEntradaInvalidosException(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<MensagemErroPadrao> dadosDeEntradaInvalidosException(MethodArgumentNotValidException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(
                 new MensagemErroPadrao(
                         System.currentTimeMillis(),
-                        422,
-                        "Erro ao cadastrar funcionário",
-                        "Dados de entrada inválidos",
+                        HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                        Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage(),
                         request.getRequestURI()));
     }
 
     @ExceptionHandler(RecursoNaoEncontrado.class)
-    public ResponseEntity<MensagemErroPadrao> recursoNaoEncontrado(RecursoNaoEncontrado ex, HttpServletRequest request) {
+    public ResponseEntity<MensagemErroPadrao> recursoNaoEncontrado(RecursoNaoEncontrado e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new MensagemErroPadrao(
                         System.currentTimeMillis(),
-                        400,
-                        "Erro ao buscar funcionário",
-                        "Campos vazios na requisição",
+                        HttpStatus.BAD_REQUEST.value(),
+                        e.getMessage(),
                         request.getRequestURI()));
     }
 
     @ExceptionHandler(AtualizacaoNaoPermitida.class)
-    public ResponseEntity<MensagemErroPadrao> atualizacaoNaoPermitida(AtualizacaoNaoPermitida ex, HttpServletRequest request) {
+    public ResponseEntity<MensagemErroPadrao> atualizacaoNaoPermitida(AtualizacaoNaoPermitida e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                 new MensagemErroPadrao(
                         System.currentTimeMillis(),
-                        403,
-                        "Erro ao atualizar funcionário",
-                        "Não é possível alterar o CPF cadastrado",
+                        HttpStatus.FORBIDDEN.value(),
+                        e.getMessage(),
                         request.getRequestURI()));
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<MensagemErroPadrao> noResourceFoundException(NoResourceFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<MensagemErroPadrao> noResourceFoundException(NoResourceFoundException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new MensagemErroPadrao(
                         System.currentTimeMillis(),
-                        400,
-                        "Erro ao buscar funcionário",
-                        "Campo id vazio na requisição",
+                        HttpStatus.NOT_FOUND.value(),
+                        e.getMessage(),
                         request.getRequestURI()));
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<MensagemErroPadrao> mensagemDeErroPadrao(RuntimeException ex, HttpServletRequest request) {
+    public ResponseEntity<MensagemErroPadrao> mensagemDeErroPadrao(RuntimeException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new MensagemErroPadrao(
                         System.currentTimeMillis(),
-                        500,
-                        "Internal Server Error",
+                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         "Ocorreu um erro inesperado. Tente novamente mais tarde.",
                         request.getRequestURI()));
     }
