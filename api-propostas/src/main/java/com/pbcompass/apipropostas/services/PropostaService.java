@@ -34,7 +34,9 @@ public class PropostaService {
     public PropostaRespostaDto buscarPorId(Long id) {
         Proposta proposta = repository.findById(id).orElseThrow(
                 () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
+        FuncionarioRespostaDto funcionario = buscarFuncionarioPorId(proposta.getFuncionarioId());
         PropostaRespostaDto resposta = MapperGenerico.toDto(proposta, PropostaRespostaDto.class);
+        resposta.setCriador(funcionario);
         return resposta;
     }
 
@@ -50,7 +52,7 @@ public class PropostaService {
 
     @Transactional
     public PropostaRespostaDto cadastrar(Long funcionarioId, PropostaCadastrarDto dto) {
-        FuncionarioRespostaDto funcionarioRespostaDto;
+
         Proposta proposta = MapperGenerico.toEntity(dto, Proposta.class);
         if (proposta.getInicioVotacao() == null){
             proposta.setInicioVotacao(new Date());
@@ -58,12 +60,7 @@ public class PropostaService {
         if (proposta.getDuracaoEmMinutos() == null){
             proposta.setDuracaoEmMinutos(1);
         }
-        try {
-            funcionarioRespostaDto = feignClient.buscarPorId(funcionarioId).getBody();
-        } catch (RuntimeException e) {
-            log.error(e.getMessage());
-            throw new ErroAoBuscarFuncionarioException(String.format("Erro ao buscar funcionario com o id %d", funcionarioId));
-        }
+        FuncionarioRespostaDto funcionarioRespostaDto =  buscarFuncionarioPorId(funcionarioId);
         proposta.setFuncionarioId(funcionarioId);
         Proposta propostaSalva = repository.save(proposta);
         PropostaRespostaDto resposta = MapperGenerico.toDto(propostaSalva, PropostaRespostaDto.class);
@@ -89,6 +86,17 @@ public class PropostaService {
         Proposta entidade = repository.findById(id).orElseThrow(
                 () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
         repository.delete(entidade);
+    }
+
+    private FuncionarioRespostaDto buscarFuncionarioPorId(Long funcionarioId) {
+        FuncionarioRespostaDto funcionario;
+        try{
+            funcionario = feignClient.buscarPorId(funcionarioId).getBody();
+        }catch (RuntimeException e) {
+            log.error(e.getMessage());
+            throw new ErroAoBuscarFuncionarioException(String.format("Erro ao buscar funcionario com o id %d", funcionarioId));
+        }
+        return funcionario;
     }
 
 }
