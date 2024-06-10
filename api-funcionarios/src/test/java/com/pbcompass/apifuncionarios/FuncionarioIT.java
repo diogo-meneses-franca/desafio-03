@@ -208,9 +208,9 @@ public class FuncionarioIT {
     public void editarFuncionario_TentativaModificarCPF_RetornarStatus403() {
         MensagemErroPadrao resposta = testClient
                 .put()
-                .uri("/api/v1/funcionarios/1")
+                .uri("/api/v1/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("Funcionario Teste Editado", "83011349096", "Rua Teste", "43999887766", "teste@email.com"))
+                .bodyValue(new FuncionarioRespostaDto(1L, "Funcionario Teste Editado", "83011349096", "Rua Teste", "43999887766", "teste@email.com"))
                 .exchange()
                 .expectStatus().isForbidden()
                 .expectBody(MensagemErroPadrao.class)
