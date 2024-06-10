@@ -18,7 +18,7 @@ public class PropostaControllerImpl implements PropostaController {
     @Override
     public ResponseEntity<PropostaRespostaDto> cadastrar(Long funcionarioId, PropostaCadastrarDto dto){
         PropostaRespostaDto resposta = service.cadastrar(funcionarioId, dto);
-        return ResponseEntity.ok().body(resposta);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
     @Override
