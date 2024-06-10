@@ -3,6 +3,7 @@ package com.pbcompass.apipropostas.services;
 import com.pbcompass.apipropostas.dto.FuncionarioRespostaDto;
 import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
+import com.pbcompass.apipropostas.exception.custom.CriadorUnicoException;
 import com.pbcompass.apipropostas.services.mapper.MapperGenerico;
 import com.pbcompass.apipropostas.entities.Proposta;
 import com.pbcompass.apipropostas.exception.ErroAoBuscarFuncionarioException;
@@ -68,20 +69,22 @@ public class PropostaService {
     }
 
     @Transactional
-    public PropostaRespostaDto editar(Long id, PropostaCadastrarDto dto) {
-        PropostaRespostaDto proposta = buscarPorId(id);
-        proposta.setNome(dto.getNome());
-        proposta.setDescricao(dto.getDescricao());
-        proposta.setDuracaoEmMinutos(dto.getDuracaoEmMinutos());
-        proposta.setInicioVotacao(dto.getInicioVotacao());
-        Proposta propostaSalva = repository.saveAndFlush(MapperGenerico.toEntity(proposta, Proposta.class));
-        return proposta;
+    public PropostaRespostaDto editar(PropostaRespostaDto dto) {
+        PropostaRespostaDto proposta = buscarPorId(dto.getId());
+        if(!proposta.getCriador().equals(dto.getCriador())) {
+            throw new CriadorUnicoException("O criador da proposta não pode ser alterado");
+        }
+        Proposta aSalvar = MapperGenerico.toEntity(dto, Proposta.class);
+        aSalvar.setFuncionarioId(dto.getCriador().getId());
+        Proposta propostaSalva = repository.save(aSalvar);
+        PropostaRespostaDto resposta = MapperGenerico.toDto(propostaSalva, PropostaRespostaDto.class);
+        FuncionarioRespostaDto criador = buscarFuncionarioPorId(propostaSalva.getFuncionarioId());
+        resposta.setCriador(criador);
+        return resposta;
     }
 
     @Transactional
     public void excluir(Long id) {
-        log.info("Proposta excluida");
-
         Proposta entidade = repository.findById(id).orElseThrow(
                 () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
         repository.delete(entidade);
