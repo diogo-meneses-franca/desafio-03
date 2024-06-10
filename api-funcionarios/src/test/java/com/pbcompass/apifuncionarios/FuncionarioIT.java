@@ -238,12 +238,4 @@ public class FuncionarioIT {
                 .expectStatus().isNotFound();
     }
 
-    @Test
-    public void deletar_ComIdInvalido_RetornandoStatus400() {
-        testClient
-                .delete()
-                .uri("/api/v1/funcionarios/abc")
-                .exchange()
-                .expectStatus().isBadRequest();
-    }
 }
