@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -13,9 +14,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class MensagemErroPadrao implements Serializable {
 
-    private Long timestamp;
+    private Date timestamp;
     private Integer status;
-    private String error;
     private String message;
     private String path;
 }
