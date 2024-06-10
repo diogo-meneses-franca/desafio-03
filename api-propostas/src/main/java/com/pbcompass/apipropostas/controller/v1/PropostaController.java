@@ -108,9 +108,9 @@ public interface PropostaController {
     )
     @GetMapping
     ResponseEntity<Page<PropostaRespostaDto>> buscarTodos(
-        @RequestParam(value = "page",defaultValue = "0") Integer page,
-        @RequestParam(value = "size", defaultValue = "20") Integer size,
-        @RequestParam(value = "direction", defaultValue = "asc") String direction
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "20") Integer size,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction
     );
 
     @Operation(summary = "Busca todas as propostas paginadas",
@@ -140,6 +140,31 @@ public interface PropostaController {
             @RequestBody @Valid PropostaCadastrarDto dto
     );
 
+    @Operation(summary = "Deleta um Proposta pelo seu id",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "Sucesso sem conteúdo",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Parâmetros inválidos",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Proposta com o id não encontrado",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+            }
+    )
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id);
 
