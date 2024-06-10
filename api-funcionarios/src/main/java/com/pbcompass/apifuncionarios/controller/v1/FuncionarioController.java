@@ -128,9 +128,9 @@ public interface FuncionarioController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MensagemErroPadrao.class))),
             }
     )
-    @PutMapping("/{id}")
+    @PutMapping
     ResponseEntity<FuncionarioRespostaDto> editar(
-            @RequestBody FuncionarioRespostaDto dto
+            @RequestBody @Valid FuncionarioRespostaDto dto
     );
 
 
