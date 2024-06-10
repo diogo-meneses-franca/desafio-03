@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Date;
+import java.util.Objects;
 
 @ControllerAdvice
 @Slf4j
@@ -35,7 +36,7 @@ public class ApiExceptionHandler {
                 new MensagemErroPadrao(
                         new Date(),
                         HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                        "Dados de entrada invalidos!",
+                        Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage(),
                         request.getRequestURI()
                 )
         );
