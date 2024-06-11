@@ -59,4 +59,13 @@ public class PropostaRepositoryTest {
 
         assertThat(propostaOpt).isEmpty();
     }
+
+    @Test
+    public void excluirProposta_ComIdExistente_RetorneSucessoNoContent() {
+        Optional<Proposta> propostaOpt = repository.findById(PROPOSTA.getId());
+        if (propostaOpt.isPresent()) {
+            repository.delete(propostaOpt.get());
+        }
+        assertThat(propostaOpt).isEmpty();
+    }
 }
