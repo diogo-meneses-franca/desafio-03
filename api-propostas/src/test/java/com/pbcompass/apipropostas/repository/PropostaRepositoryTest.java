@@ -1,12 +1,11 @@
-package com.pbcompass.apipropostas.domain;
+package com.pbcompass.apipropostas.repository;
 
-import static com.pbcompass.apipropostas.common.PropostaConstantes.PROPOSTA;
-import static com.pbcompass.apipropostas.common.PropostaConstantes.PROPOSTA_INVALIDA;
+import static com.pbcompass.apipropostas.constantes.PropostaConstantes.PROPOSTA;
+import static com.pbcompass.apipropostas.constantes.PropostaConstantes.PROPOSTA_INVALIDA;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.pbcompass.apipropostas.entities.Proposta;
-import com.pbcompass.apipropostas.repository.PropostaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
