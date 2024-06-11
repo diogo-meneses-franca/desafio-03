@@ -21,6 +21,7 @@ public class ApiGatewayApplication {
         return builder.routes()
                 .route(r -> r.path("/api/v1/funcionarios/**").uri("lb://ms-funcionario"))
                 .route(r -> r.path("/api/v1/propostas/**").uri("lb://ms-propostas"))
+                .route(r -> r.path("/api/v1/resultados/**").uri("lb://ms-resultados"))
                 .build();
     }
 
