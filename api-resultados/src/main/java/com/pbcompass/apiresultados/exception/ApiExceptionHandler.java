@@ -2,6 +2,7 @@ package com.pbcompass.apiresultados.exception;
 
 import com.pbcompass.apiresultados.exception.custom.ErroAoBuscarPropostaException;
 import com.pbcompass.apiresultados.exception.custom.MensagemErroPadrao;
+import com.pbcompass.apiresultados.exception.custom.RecursoNaoEncontrado;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,17 @@ public class ApiExceptionHandler {
                 new MensagemErroPadrao(
                         new Date(),
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        e.getMessage(),
+                        request.getRequestURI()));
+    }
+
+    @ExceptionHandler(RecursoNaoEncontrado.class)
+    public ResponseEntity<MensagemErroPadrao> recursoNaoEncontrado(RecursoNaoEncontrado e, HttpServletRequest request) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new MensagemErroPadrao(
+                        new Date(),
+                        HttpStatus.NOT_FOUND.value(),
                         e.getMessage(),
                         request.getRequestURI()));
     }
