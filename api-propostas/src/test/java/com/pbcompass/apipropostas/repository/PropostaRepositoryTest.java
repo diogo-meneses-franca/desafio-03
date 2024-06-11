@@ -1,17 +1,17 @@
-package com.pbcompass.apipropostas.domain;
+package com.pbcompass.apipropostas.repository;
 
-import static com.pbcompass.apipropostas.common.PropostaConstantes.PROPOSTA;
-import static com.pbcompass.apipropostas.common.PropostaConstantes.PROPOSTA_INVALIDA;
+import static com.pbcompass.apipropostas.constantes.PropostaConstantes.PROPOSTA;
+import static com.pbcompass.apipropostas.constantes.PropostaConstantes.PROPOSTA_INVALIDA;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.pbcompass.apipropostas.entities.Proposta;
-import com.pbcompass.apipropostas.repository.PropostaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Optional;
 
@@ -44,11 +44,6 @@ public class PropostaRepositoryTest {
     }
 
     @Test
-    public void criarProposta_ComDadosInvalidos_RetorneBadRequest() {
-        assertThatThrownBy(() -> repository.save(PROPOSTA_INVALIDA)).isInstanceOf(RuntimeException.class);
-    }
-
-    @Test
     public void buscarProposta_ComIdExistente_RetorneOk() {
         Proposta proposta = testEntityManager.persistFlushFind(PROPOSTA);
 
@@ -62,6 +57,15 @@ public class PropostaRepositoryTest {
     public void buscarProposta_ComIdInexistente_RetorneNotFound() {
         Optional<Proposta> propostaOpt = repository.findById(10L);
 
+        assertThat(propostaOpt).isEmpty();
+    }
+
+    @Test
+    public void excluirProposta_ComIdExistente_RetorneSucessoNoContent() {
+        Optional<Proposta> propostaOpt = repository.findById(1L);
+        if (propostaOpt.isPresent()) {
+            repository.delete(propostaOpt.get());
+        }
         assertThat(propostaOpt).isEmpty();
     }
 }

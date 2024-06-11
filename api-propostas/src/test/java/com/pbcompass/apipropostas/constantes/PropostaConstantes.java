@@ -1,4 +1,4 @@
-package com.pbcompass.apipropostas.common;
+package com.pbcompass.apipropostas.constantes;
 
 import com.pbcompass.apipropostas.entities.Proposta;
 
