@@ -30,3 +30,38 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "metrics,health,info,loggers"
+      base-path: "/gerenciador"
+      path-mapping:
+        health: "saude"
+        metrics: "metricas"
+    enabled-by-default: false
+  metrics:
+    enable:
+      executor: false
+  health:
+    diskspace:
+      enabled: false
+  info:
+    env:
+      enabled: true
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    metrics:
+      enabled: true
+    info:
+      enabled: true
+    auditevents:
+      enabled: true
+    loggers:
+      enabled: true
+info:
+  application:
+    name: ${spring.application.name}
+    description: API de Propostas
