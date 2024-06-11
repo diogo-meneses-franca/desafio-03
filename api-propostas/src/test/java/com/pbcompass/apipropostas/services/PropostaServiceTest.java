@@ -7,6 +7,7 @@ import com.pbcompass.apipropostas.entities.Proposta;
 import com.pbcompass.apipropostas.feign.FuncionarioFeignClient;
 import com.pbcompass.apipropostas.repository.PropostaRepository;
 import com.pbcompass.apipropostas.services.mapper.MapperGenerico;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,12 +58,19 @@ public class PropostaServiceTest {
     }
 
     @Test
-    void excluirProposta_RetornarNoContent() {
+    void excluirProposta_ComIdExistente_RetornarNoContent() {
         given(repository.findById(any())).willReturn(Optional.of(proposta));
         willDoNothing().given(repository).delete(proposta);
         service.excluir(proposta.getId());
 
         verify(repository, times(1)).delete(proposta);
     }
+
+    @Test
+    void excluirProposta_ComIdInexistente_RetornarNoContent() {
+        given(repository.findById(anyLong())).willThrow(EntityNotFoundException.class);
+        assertThrows(EntityNotFoundException.class, () -> service.excluir(proposta.getId()));
+    }
+
 
 }
