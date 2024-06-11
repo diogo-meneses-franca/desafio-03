@@ -1,5 +1,6 @@
 package com.pbcompass.apifuncionarios;
 
+import com.pbcompass.apifuncionarios.dto.FuncionarioCadastrarDto;
 import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
 import com.pbcompass.apifuncionarios.entities.Funcionario;
 import com.pbcompass.apifuncionarios.exception.custom.DadosUnicosException;
@@ -14,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.context.jdbc.Sql;
+
 import java.util.Optional;
 
 import static com.pbcompass.apifuncionarios.constantes.FuncionarioConstantes.FUNCIONARIO;
@@ -105,5 +108,11 @@ public class FuncionarioServiceTest {
         service.excluir(funcionario.getId());
 
         verify(repository, times(1)).delete(funcionario);
+    }
+
+    @Test
+    void excluir_ComIdInexistente_Void(){
+        given(repository.findById(anyLong())).willThrow(EntityNotFoundException.class);
+        assertThrows(EntityNotFoundException.class, () -> service.excluir(funcionario.getId()));
     }
 }
