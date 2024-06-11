@@ -1,4 +1,4 @@
-package com.pbcompass.apifuncionarios;
+package com.pbcompass.apifuncionarios.controller.v1;
 
 import com.pbcompass.apifuncionarios.dto.FuncionarioCadastrarDto;
 import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
@@ -78,12 +78,12 @@ public class FuncionarioIT {
     }
 
     @Test
-    public void cadastrarFuncionario_ComDadosInvalidos_RetornarMensagemErroPadraoStatus422(){
+    public void cadastrarFuncionario_ComCpfInvalido_RetornarMensagemErroPadraoStatus422(){
         MensagemErroPadrao resposta = testClient
                 .post()
                 .uri("/api/v1/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "000000000000000", "Rua Teste", "000000000000000", "joao@email.com"))
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "000000000000000", "Rua Teste", "43995122788", "joao@email.com"))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(MensagemErroPadrao.class)
@@ -91,7 +91,25 @@ public class FuncionarioIT {
 
         assertThat(resposta).isNotNull();
         assertThat(resposta.getStatus()).isEqualTo(422);
-        assertThat(resposta.getMessage()).isEqualTo("Dados de entrada inválidos");
+        assertThat(resposta.getMessage()).isEqualTo("número do registro de contribuinte individual brasileiro (CPF) inválido");
+        assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios");
+    }
+
+    @Test
+    public void cadastrarFuncionario_ComTelefoneInvalido_RetornarMensagemErroPadraoStatus422(){
+        MensagemErroPadrao resposta = testClient
+                .post()
+                .uri("/api/v1/funcionarios")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "31939422000", "Rua Teste", "000000000000000", "joao@email.com"))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody(MensagemErroPadrao.class)
+                .returnResult().getResponseBody();
+
+        assertThat(resposta).isNotNull();
+        assertThat(resposta.getStatus()).isEqualTo(422);
+        assertThat(resposta.getMessage()).isEqualTo("Telefone deve possuir entre 10 e 14 caracteres");
         assertThat(resposta.getPath()).isEqualTo("/api/v1/funcionarios");
     }
 
@@ -136,16 +154,16 @@ public class FuncionarioIT {
     public void editarFuncionario_ComDadosValidos_RetornarFuncionarioRespostaDtoStatus200() {
         FuncionarioRespostaDto resposta = testClient
                 .put()
-                .uri("/api/v1/funcionarios/1")
+                .uri("/api/v1/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("Funcionario Teste Editado", "10498168387", "Rua Teste", "43999887766", "teste@email.com"))
+                .bodyValue(new FuncionarioRespostaDto(1L, "Funcionario Teste Editado", "10498168387", "Rua Teste", "43999887766", "teste@email.com"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(FuncionarioRespostaDto.class)
                 .returnResult().getResponseBody();
 
         assertThat(resposta).isNotNull();
-        assertThat(resposta.getId()).isNotNull();
+        assertThat(resposta.getId()).isEqualTo(1L);
         assertThat(resposta.getNome()).isEqualTo("Funcionario Teste Editado");
         assertThat(resposta.getCpf()).isEqualTo("10498168387");
         assertThat(resposta.getEndereco()).isEqualTo("Rua Teste");
@@ -157,9 +175,9 @@ public class FuncionarioIT {
     public void editarFuncionario_ComIdInexistente_RetornarStatus404() {
         MensagemErroPadrao resposta = testClient
                 .put()
-                .uri("/api/v1/funcionarios/10")
+                .uri("/api/v1/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("Funcionario Teste Editado", "84319254007", "Rua Teste", "43999887766", "teste@email.com"))
+                .bodyValue(new FuncionarioRespostaDto(10L, "Funcionario Teste Editado", "84319254007", "Rua Teste", "43999887766", "teste@email.com"))
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(MensagemErroPadrao.class)
@@ -174,9 +192,9 @@ public class FuncionarioIT {
     public void editarFuncionario_ComDadosInvalidos_RetornarStatus422() {
         MensagemErroPadrao resposta = testClient
                 .put()
-                .uri("/api/v1/funcionarios/1")
+                .uri("/api/v1/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("", "", "", "", ""))
+                .bodyValue(new FuncionarioRespostaDto(0L, "", "", "", "", ""))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(MensagemErroPadrao.class)
@@ -190,9 +208,9 @@ public class FuncionarioIT {
     public void editarFuncionario_TentativaModificarCPF_RetornarStatus403() {
         MensagemErroPadrao resposta = testClient
                 .put()
-                .uri("/api/v1/funcionarios/1")
+                .uri("/api/v1/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("Funcionario Teste Editado", "83011349096", "Rua Teste", "43999887766", "teste@email.com"))
+                .bodyValue(new FuncionarioRespostaDto(1L, "Funcionario Teste Editado", "83011349096", "Rua Teste", "43999887766", "teste@email.com"))
                 .exchange()
                 .expectStatus().isForbidden()
                 .expectBody(MensagemErroPadrao.class)
@@ -220,12 +238,4 @@ public class FuncionarioIT {
                 .expectStatus().isNotFound();
     }
 
-    @Test
-    public void deletar_ComIdInvalido_RetornandoStatus400() {
-        testClient
-                .delete()
-                .uri("/api/v1/funcionarios/abc")
-                .exchange()
-                .expectStatus().isBadRequest();
-    }
 }

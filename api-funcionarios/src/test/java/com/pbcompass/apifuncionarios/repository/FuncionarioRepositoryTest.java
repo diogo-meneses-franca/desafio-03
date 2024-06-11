@@ -1,7 +1,6 @@
-package com.pbcompass.apifuncionarios;
+package com.pbcompass.apifuncionarios.repository;
 
 import com.pbcompass.apifuncionarios.entities.Funcionario;
-import com.pbcompass.apifuncionarios.repository.FuncionarioRepository;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
