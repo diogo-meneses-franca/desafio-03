@@ -3,6 +3,7 @@ package com.pbcompass.apipropostas.controller.v1;
 import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
 import com.pbcompass.apipropostas.dto.VotoCadastrarDto;
+import com.pbcompass.apipropostas.entities.Voto;
 import com.pbcompass.apipropostas.exception.custom.MensagemErroPadrao;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +17,8 @@ import jakarta.websocket.server.PathParam;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RequestMapping("/api/v1/propostas")
@@ -195,5 +198,39 @@ public interface PropostaController {
 
     @PutMapping("/votar")
     ResponseEntity<Void> votar(@RequestBody VotoCadastrarDto dto);
+
+    @Operation(summary = "Calcula os votos de uma proposta",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Sucesso",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Votação em andamento",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Funcionário não autorizado a realizar o cálculo",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Proposta com o id não encontrado",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+            }
+    )
+    @PutMapping("/calcular/{propostaId}")
+    ResponseEntity<Voto.Decisao> calcularResultado(@PathVariable Long propostaId, @RequestParam("funcionarioId") Long funcionarioId);
 
 }
