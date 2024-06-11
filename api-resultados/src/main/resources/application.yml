@@ -1,3 +1,33 @@
 spring:
   application:
-    name: api-resultados
+    name: ms-resultados
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+        generate_statistics: true
+  datasource:
+    url: jdbc:h2:mem:dbresultados
+    driver-class-name: org.h2.Driver
+    username: admin
+    password: admin
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+springdoc:
+  api-docs:
+    path: /v1/resultados
+  swagger-ui:
+    path: /swagger-ui.html
+  packages-to-scan: com.pbcompass.apiresultados.controller
+server:
+  port: 0
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
