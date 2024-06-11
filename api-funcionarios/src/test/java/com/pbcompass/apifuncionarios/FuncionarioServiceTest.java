@@ -61,8 +61,9 @@ public class FuncionarioServiceTest {
 
     @Test
     void cadastrarFuncionario_ComDadosCpfOuEmailJaCadastrado_ThrowsDadosUnicosException(){
-        given(repository.save(funcionario)).willThrow(DataIntegrityViolationException.class);
-        assertThrows(DadosUnicosException.class, () -> service.cadastrar(funcionario));
+        doThrow(DadosUnicosException.class).when(repository).save(any(Funcionario.class));
+
+        assertThrows(DadosUnicosException.class, () -> service.cadastrar(FUNC_CADASTRAR_DTO));
     }
 
     @Test
