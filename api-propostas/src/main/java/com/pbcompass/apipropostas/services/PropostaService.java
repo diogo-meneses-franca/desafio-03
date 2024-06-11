@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -33,8 +34,7 @@ public class PropostaService {
 
     @Transactional(readOnly = true)
     public PropostaRespostaDto buscarPorId(Long id) {
-        Proposta proposta = repository.findById(id).orElseThrow(
-                () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
+        Proposta proposta = buscarPropostaPorId(id);
         FuncionarioRespostaDto funcionario = buscarFuncionarioPorId(proposta.getFuncionarioId());
         PropostaRespostaDto resposta = MapperGenerico.toDto(proposta, PropostaRespostaDto.class);
         resposta.setCriador(funcionario);
@@ -71,8 +71,12 @@ public class PropostaService {
 
     @Transactional
     public PropostaRespostaDto editar(PropostaRespostaDto dto) {
-        PropostaRespostaDto proposta = buscarPorId(dto.getId());
-        if(!proposta.getCriador().equals(dto.getCriador())) {
+        Proposta proposta = buscarPropostaPorId(dto.getId());
+        if(!proposta.getVotos().isEmpty()) {
+            throw new VotacaoEmAndamentoException("A proposta já possui votos, não é possível editá-la");
+        }
+        PropostaRespostaDto propostaDto = buscarPorId(dto.getId());
+        if(!propostaDto.getCriador().equals(dto.getCriador())) {
             throw new CriadorUnicoException("O criador da proposta não pode ser alterado");
         }
         Proposta aSalvar = MapperGenerico.toEntity(dto, Proposta.class);
@@ -86,21 +90,15 @@ public class PropostaService {
 
     @Transactional
     public void excluir(Long id) {
-        Proposta entidade = repository.findById(id).orElseThrow(
-                () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
+        Proposta entidade = buscarPropostaPorId(id);
         repository.delete(entidade);
     }
 
     @Transactional
     public void votar(VotoCadastrarDto dto) {
         buscarFuncionarioPorId(dto.getFuncionarioId());
-        Proposta proposta = repository.findById(dto.getPropostaId()).orElseThrow(
-                () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", dto.getPropostaId())));
-        Long inicioDaVotacao = proposta.getInicioVotacao().getTime();
-        Long duracaoEmMilisegundos = proposta.getDuracaoEmMinutos() * 60 * 1000L;
-        long fimDaVotacao = inicioDaVotacao + duracaoEmMilisegundos;
-        long momentoDoVoto = new Date().getTime();
-        if(momentoDoVoto > fimDaVotacao) {
+        Proposta proposta = buscarPropostaPorId(dto.getPropostaId());
+        if(!votacaoEstaAberta(proposta)) {
             throw new VotoInvalidoException("A votação desta proposta já foi encerrada!");
         }
         List<Voto> votos = proposta.getVotos();
@@ -125,6 +123,45 @@ public class PropostaService {
             throw new ErroAoBuscarFuncionarioException(String.format("Erro ao buscar funcionario com o id %d", funcionarioId));
         }
         return funcionario;
+    }
+
+    public Voto.Decisao calcularResultado(Long propostaId, Long funcionarioId) {
+        Proposta proposta = buscarPropostaPorId(propostaId);
+        if(!funcionarioId.equals(proposta.getFuncionarioId())) {
+            throw new FuncionarioNaoAutorizadoException("Somente o criador da proposta é autorizado a calcular o resultado");
+        }
+        if (votacaoEstaAberta(proposta)) {
+            throw new VotacaoEmAndamentoException("Aguarde o encerramento da votação para calcular o resultado");
+        }
+        List<Voto> votos = proposta.getVotos();
+        Integer aprovar = 0;
+        Integer reprovar = 0;
+        for(Voto voto : votos) {
+            if(voto.getDecisao().equals(Voto.Decisao.APROVAR)){
+                aprovar++;
+            } else {
+                reprovar++;
+            }
+        }
+        return (aprovar > reprovar) ? Voto.Decisao.APROVAR : Voto.Decisao.REJEITAR;
+    }
+
+    private Boolean votacaoEstaAberta(Proposta proposta) {
+        Long inicioDaVotacao = proposta.getInicioVotacao().getTime();
+        Long duracaoEmMilisegundos = proposta.getDuracaoEmMinutos() * 60 * 1000L;
+        long fimDaVotacao = inicioDaVotacao + duracaoEmMilisegundos;
+        long momentoDoVoto = new Date().getTime();
+        if(momentoDoVoto < fimDaVotacao && momentoDoVoto > inicioDaVotacao) {
+            return true;
+        }
+        return false;
+    }
+
+    private Proposta buscarPropostaPorId(Long propostaId) {
+        Proposta proposta = repository.findById(propostaId).orElseThrow(
+                () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", propostaId))
+        );
+        return proposta;
     }
 
 }
