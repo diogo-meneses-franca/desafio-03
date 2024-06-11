@@ -62,7 +62,7 @@ public class PropostaRepositoryTest {
 
     @Test
     public void excluirProposta_ComIdExistente_RetorneSucessoNoContent() {
-        Optional<Proposta> propostaOpt = repository.findById(PROPOSTA.getId());
+        Optional<Proposta> propostaOpt = repository.findById(1L);
         if (propostaOpt.isPresent()) {
             repository.delete(propostaOpt.get());
         }
