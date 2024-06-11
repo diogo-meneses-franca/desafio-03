@@ -1,4 +1,4 @@
-package com.pbcompass.api_resultados.service.mapper;
+package com.pbcompass.apiresultados.service.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

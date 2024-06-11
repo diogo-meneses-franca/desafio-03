@@ -1,4 +1,4 @@
-package com.pbcompass.api_resultados.entities;
+package com.pbcompass.apiresultados.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
