@@ -2,9 +2,13 @@ package com.pbcompass.apiresultados.service;
 
 
 import com.pbcompass.apiresultados.dto.PropostaRespostaDto;
+import com.pbcompass.apiresultados.dto.ResultadoRespostaDto;
+import com.pbcompass.apiresultados.entities.Resultado;
 import com.pbcompass.apiresultados.exception.custom.ErroAoBuscarPropostaException;
+import com.pbcompass.apiresultados.exception.custom.RecursoNaoEncontrado;
 import com.pbcompass.apiresultados.feign.PropostaFeignClient;
 import com.pbcompass.apiresultados.repository.ResultadoRepository;
+import com.pbcompass.apiresultados.service.mapper.MapperGenerico;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,14 @@ public class ResultadoService {
 
     private final ResultadoRepository repository;
     private PropostaFeignClient feignClient;
+
+    public ResultadoRespostaDto buscarPorId(Long id) {
+        Resultado resultado = repository.findById(id).orElseThrow(
+                () -> new RecursoNaoEncontrado(String.format("Resultado com o id %d não encontrado", id))
+        );
+        ResultadoRespostaDto resposta = MapperGenerico.toDto(resultado, ResultadoRespostaDto.class);
+        return resposta;
+    }
 
     private PropostaRespostaDto buscarPropostaPorId(Long propostaId) {
         PropostaRespostaDto proposta;
