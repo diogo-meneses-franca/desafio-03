@@ -1,4 +1,4 @@
-package com.pbcompass.apifuncionarios;
+package com.pbcompass.apifuncionarios.controller.v1;
 
 import com.pbcompass.apifuncionarios.dto.FuncionarioCadastrarDto;
 import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;

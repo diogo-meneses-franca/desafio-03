@@ -1,7 +1,6 @@
-package com.pbcompass.apifuncionarios;
+package com.pbcompass.apifuncionarios.services.mapper;
 
 import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
-import com.pbcompass.apifuncionarios.services.mapper.MapperGenerico;
 import com.pbcompass.apifuncionarios.entities.Funcionario;
 import org.junit.jupiter.api.Test;
 

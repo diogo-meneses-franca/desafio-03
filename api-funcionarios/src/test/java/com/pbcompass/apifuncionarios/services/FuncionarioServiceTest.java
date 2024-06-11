@@ -1,10 +1,9 @@
-package com.pbcompass.apifuncionarios;
+package com.pbcompass.apifuncionarios.services;
 
 import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
 import com.pbcompass.apifuncionarios.entities.Funcionario;
 import com.pbcompass.apifuncionarios.exception.custom.DadosUnicosException;
 import com.pbcompass.apifuncionarios.repository.FuncionarioRepository;
-import com.pbcompass.apifuncionarios.services.FuncionarioService;
 import com.pbcompass.apifuncionarios.services.mapper.MapperGenerico;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
