@@ -3,11 +3,14 @@ package com.pbcompass.apipropostas.controller.v1;
 import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
 import com.pbcompass.apipropostas.dto.VotoCadastrarDto;
+import com.pbcompass.apipropostas.entities.Voto;
 import com.pbcompass.apipropostas.services.PropostaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,6 +54,12 @@ public class PropostaControllerImpl implements PropostaController {
     public ResponseEntity<Void> votar(VotoCadastrarDto dto) {
         service.votar(dto);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<Voto.Decisao> calcularResultado(Long propostaId, Long funcionarioId) {
+        Voto.Decisao resposta = service.calcularResultado(propostaId, funcionarioId);
+        return ResponseEntity.ok(resposta);
     }
 
 }
