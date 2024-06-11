@@ -1,6 +1,5 @@
 package com.pbcompass.apifuncionarios;
 
-import com.pbcompass.apifuncionarios.dto.FuncionarioCadastrarDto;
 import com.pbcompass.apifuncionarios.dto.FuncionarioRespostaDto;
 import com.pbcompass.apifuncionarios.entities.Funcionario;
 import com.pbcompass.apifuncionarios.exception.custom.DadosUnicosException;
@@ -14,8 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.jdbc.Sql;
+
 
 import java.util.Optional;
 
@@ -88,19 +86,7 @@ public class FuncionarioServiceTest {
         given(repository.findById(anyLong())).willThrow(EntityNotFoundException.class);
         assertThrows(EntityNotFoundException.class, () -> service.buscarPorId(2L));
     }
-/*
-    @Test
-    void editar_ComDadosValidos_RetornaObjetoFuncionarioAtualizado(){
-        given(repository.findById(anyLong())).willReturn(Optional.of(funcionario));
-        funcionario.setNome("João Santos");
-        funcionario.setEmail("joaosantos@email.com");
-        given(repository.saveAndFlush(funcionario)).willReturn(funcionario);
-        Funcionario funcionarioAtualizado = service.editar(funcionario.getId(), funcionario);
 
-        assertEquals(funcionarioAtualizado.getNome(), funcionario.getNome());
-        assertEquals(funcionarioAtualizado.getEmail(), funcionario.getEmail());
-    }
-*/
     @Test
     void excluir_ComIdValido_Void(){
         given(repository.findById(anyLong())).willReturn(Optional.of(funcionario));
