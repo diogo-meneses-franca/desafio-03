@@ -31,7 +31,7 @@ public class Voto {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "funcionario_id")
+    @Column(name = "funcionario_id", nullable = false)
     private Long funcionarioId;
 
     @ManyToOne

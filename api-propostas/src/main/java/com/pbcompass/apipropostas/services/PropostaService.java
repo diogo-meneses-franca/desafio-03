@@ -3,14 +3,13 @@ package com.pbcompass.apipropostas.services;
 import com.pbcompass.apipropostas.dto.FuncionarioRespostaDto;
 import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
-import com.pbcompass.apipropostas.exception.custom.CriadorUnicoException;
+import com.pbcompass.apipropostas.dto.VotoCadastrarDto;
+import com.pbcompass.apipropostas.entities.Voto;
+import com.pbcompass.apipropostas.exception.custom.*;
 import com.pbcompass.apipropostas.services.mapper.MapperGenerico;
 import com.pbcompass.apipropostas.entities.Proposta;
-import com.pbcompass.apipropostas.exception.ErroAoBuscarFuncionarioException;
 import com.pbcompass.apipropostas.feign.FuncionarioFeignClient;
-import com.pbcompass.apipropostas.exception.custom.RecursoNaoEncontrado;
 import com.pbcompass.apipropostas.repository.PropostaRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -88,6 +89,31 @@ public class PropostaService {
         Proposta entidade = repository.findById(id).orElseThrow(
                 () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", id)));
         repository.delete(entidade);
+    }
+
+    @Transactional
+    public void votar(VotoCadastrarDto dto) {
+        buscarFuncionarioPorId(dto.getFuncionarioId());
+        Proposta proposta = repository.findById(dto.getPropostaId()).orElseThrow(
+                () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", dto.getPropostaId())));
+        Long inicioDaVotacao = proposta.getInicioVotacao().getTime();
+        Long duracaoEmMilisegundos = proposta.getDuracaoEmMinutos() * 60 * 1000L;
+        long fimDaVotacao = inicioDaVotacao + duracaoEmMilisegundos;
+        long momentoDoVoto = new Date().getTime();
+        if(momentoDoVoto > fimDaVotacao) {
+            throw new VotoInvalidoException("A votação desta proposta já foi encerrada!");
+        }
+        List<Voto> votos = proposta.getVotos();
+        log.error(Arrays.toString(votos.toArray()));
+        Voto voto = dto.toVoto();
+        votos.forEach(obj -> {
+            if(obj.getFuncionarioId().equals(voto.getFuncionarioId())) {
+                throw new VotoInvalidoException("É permitido somente um voto por id!");
+            }
+        });
+        voto.setProposta(proposta);
+        votos.add(voto);
+        repository.save(proposta);
     }
 
     private FuncionarioRespostaDto buscarFuncionarioPorId(Long funcionarioId) {

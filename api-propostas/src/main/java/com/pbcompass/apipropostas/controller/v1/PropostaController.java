@@ -2,7 +2,8 @@ package com.pbcompass.apipropostas.controller.v1;
 
 import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
-import com.pbcompass.apipropostas.exception.MensagemErroPadrao;
+import com.pbcompass.apipropostas.dto.VotoCadastrarDto;
+import com.pbcompass.apipropostas.exception.custom.MensagemErroPadrao;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -191,5 +192,8 @@ public interface PropostaController {
     )
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id);
+
+    @PutMapping("/votar")
+    ResponseEntity<Void> votar(@RequestBody VotoCadastrarDto dto);
 
 }

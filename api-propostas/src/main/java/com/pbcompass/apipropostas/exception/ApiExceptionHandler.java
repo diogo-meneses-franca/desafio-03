@@ -1,7 +1,6 @@
 package com.pbcompass.apipropostas.exception;
 
-import com.pbcompass.apipropostas.exception.custom.CriadorUnicoException;
-import com.pbcompass.apipropostas.exception.custom.RecursoNaoEncontrado;
+import com.pbcompass.apipropostas.exception.custom.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,9 +24,7 @@ public class ApiExceptionHandler {
                         new Date(),
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         "Ocorreu um erro inesperado, tente novamente mais tarde!",
-                        request.getRequestURI()
-                )
-        );
+                        request.getRequestURI()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -38,9 +35,7 @@ public class ApiExceptionHandler {
                         new Date(),
                         HttpStatus.UNPROCESSABLE_ENTITY.value(),
                         Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage(),
-                        request.getRequestURI()
-                )
-        );
+                        request.getRequestURI()));
     }
 
     @ExceptionHandler(CriadorUnicoException.class)
@@ -51,9 +46,7 @@ public class ApiExceptionHandler {
                         new Date(),
                         HttpStatus.BAD_REQUEST.value(),
                         "O criador da proposta não pode ser alterado",
-                        request.getRequestURI()
-                )
-        );
+                        request.getRequestURI()));
     }
 
     @ExceptionHandler(ErroAoBuscarFuncionarioException.class)
@@ -64,9 +57,7 @@ public class ApiExceptionHandler {
                         new Date(),
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         e.getMessage(),
-                        request.getRequestURI()
-                )
-        );
+                        request.getRequestURI()));
     }
 
     @ExceptionHandler(RecursoNaoEncontrado.class)
@@ -77,8 +68,17 @@ public class ApiExceptionHandler {
                         new Date(),
                         HttpStatus.NOT_FOUND.value(),
                         e.getMessage(),
-                        request.getRequestURI()
-                )
-        );
+                        request.getRequestURI()));
+    }
+
+    @ExceptionHandler(VotoInvalidoException.class)
+    public ResponseEntity<MensagemErroPadrao> votoUnicoException(VotoInvalidoException e, HttpServletRequest request) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new MensagemErroPadrao(
+                        new Date(),
+                        HttpStatus.BAD_REQUEST.value(),
+                        e.getMessage(),
+                        request.getRequestURI()));
     }
 }

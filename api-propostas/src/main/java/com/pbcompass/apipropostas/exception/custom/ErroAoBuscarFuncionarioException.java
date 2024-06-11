@@ -1,4 +1,4 @@
-package com.pbcompass.apipropostas.exception;
+package com.pbcompass.apipropostas.exception.custom;
 
 public class ErroAoBuscarFuncionarioException extends RuntimeException {
 
