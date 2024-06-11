@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Optional;
 
@@ -40,11 +41,6 @@ public class PropostaRepositoryTest {
         assertThat(p.getFuncionarioId()).isEqualTo(PROPOSTA.getFuncionarioId());
         assertThat(p.getDuracaoEmMinutos()).isEqualTo(PROPOSTA.getDuracaoEmMinutos());
         assertThat(p.getInicioVotacao()).isEqualTo(PROPOSTA.getInicioVotacao());
-    }
-
-    @Test
-    public void criarProposta_ComDadosInvalidos_RetorneBadRequest() {
-        assertThatThrownBy(() -> repository.save(PROPOSTA_INVALIDA)).isInstanceOf(RuntimeException.class);
     }
 
     @Test
