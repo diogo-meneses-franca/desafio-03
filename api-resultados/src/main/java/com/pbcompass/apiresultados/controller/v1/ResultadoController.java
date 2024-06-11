@@ -1,4 +1,4 @@
-package com.pbcompass.api_resultados.controller.v1;
+package com.pbcompass.apiresultados.controller.v1;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 

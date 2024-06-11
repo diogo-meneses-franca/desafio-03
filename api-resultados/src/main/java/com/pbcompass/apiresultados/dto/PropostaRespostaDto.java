@@ -1,4 +1,4 @@
-package com.pbcompass.api_resultados.dto;
+package com.pbcompass.apiresultados.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

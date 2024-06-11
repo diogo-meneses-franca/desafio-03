@@ -1,4 +1,4 @@
-package com.pbcompass.api_resultados.exception.custom;
+package com.pbcompass.apiresultados.exception.custom;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

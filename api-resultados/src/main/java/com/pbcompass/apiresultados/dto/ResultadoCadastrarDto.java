@@ -1,4 +1,4 @@
-package com.pbcompass.api_resultados.dto;
+package com.pbcompass.apiresultados.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

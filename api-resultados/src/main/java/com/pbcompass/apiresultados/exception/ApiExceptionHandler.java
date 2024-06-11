@@ -1,6 +1,6 @@
-package com.pbcompass.api_resultados.exception;
+package com.pbcompass.apiresultados.exception;
 
-import com.pbcompass.api_resultados.exception.custom.MensagemErroPadrao;
+import com.pbcompass.apiresultados.exception.custom.MensagemErroPadrao;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

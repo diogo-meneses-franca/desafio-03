@@ -1,6 +1,6 @@
-package com.pbcompass.api_resultados.controller.v1;
+package com.pbcompass.apiresultados.controller.v1;
 
-import com.pbcompass.api_resultados.service.ResultadoService;
+import com.pbcompass.apiresultados.service.ResultadoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 

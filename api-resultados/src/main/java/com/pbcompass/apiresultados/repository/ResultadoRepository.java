@@ -1,6 +1,6 @@
-package com.pbcompass.api_resultados.repository;
+package com.pbcompass.apiresultados.repository;
 
-import com.pbcompass.api_resultados.entities.Resultado;
+import com.pbcompass.apiresultados.entities.Resultado;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

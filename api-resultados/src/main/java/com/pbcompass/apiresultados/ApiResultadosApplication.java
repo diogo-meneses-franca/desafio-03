@@ -1,4 +1,4 @@
-package com.pbcompass.api_resultados;
+package com.pbcompass.apiresultados;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
