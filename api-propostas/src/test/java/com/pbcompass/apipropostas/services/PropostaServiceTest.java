@@ -1,12 +1,8 @@
 package com.pbcompass.apipropostas.services;
 
 import com.pbcompass.apipropostas.dto.FuncionarioRespostaDto;
-import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
-import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
 import com.pbcompass.apipropostas.entities.Proposta;
-import com.pbcompass.apipropostas.feign.FuncionarioFeignClient;
 import com.pbcompass.apipropostas.repository.PropostaRepository;
-import com.pbcompass.apipropostas.services.mapper.MapperGenerico;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,9 +22,6 @@ public class PropostaServiceTest {
 
     @Mock
     private PropostaRepository repository;
-
-    @Mock
-    private FuncionarioFeignClient feignClient;
 
     @InjectMocks
     private PropostaService service;
