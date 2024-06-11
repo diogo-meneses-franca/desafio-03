@@ -81,4 +81,26 @@ public class ApiExceptionHandler {
                         e.getMessage(),
                         request.getRequestURI()));
     }
+
+    @ExceptionHandler(VotacaoEmAndamentoException.class)
+    public ResponseEntity<MensagemErroPadrao> votacaoEmAndamentoException(VotacaoEmAndamentoException e, HttpServletRequest request) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new MensagemErroPadrao(
+                        new Date(),
+                        HttpStatus.BAD_REQUEST.value(),
+                        e.getMessage(),
+                        request.getRequestURI()));
+    }
+
+    @ExceptionHandler(FuncionarioNaoAutorizadoException.class)
+    public ResponseEntity<MensagemErroPadrao> funcionarioNaoAutorizadoException(FuncionarioNaoAutorizadoException e, HttpServletRequest request) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                new MensagemErroPadrao(
+                        new Date(),
+                        HttpStatus.FORBIDDEN.value(),
+                        e.getMessage(),
+                        request.getRequestURI()));
+    }
 }
