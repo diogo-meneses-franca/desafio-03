@@ -264,6 +264,19 @@ necessário.
 
 ### MS-resultados
 
+### Cadastrar Resultado
+
+- **Método**: `cadastrar`
+  <a name="cadastrar3"></a>
+- **body**:
+
+```
+{
+    "propostaid": "1",
+    "resultado": "APROVAR",
+}
+```
+
 ### Buscar todas as Resultados
 
 <a name="buscartodos3"></a>
