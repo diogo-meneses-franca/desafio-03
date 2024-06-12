@@ -83,7 +83,7 @@ public class FuncionarioIT {
                 .post()
                 .uri("/api/v1/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "000000000000000", "Rua Teste", "43995122788", "joao@email.com"))
+                .bodyValue(new FuncionarioCadastrarDto("Funcionario", "00000000000", "Rua Teste", "43995122788", "joao@email.com"))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(MensagemErroPadrao.class)
