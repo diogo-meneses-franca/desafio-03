@@ -58,6 +58,14 @@ public interface FuncionarioController {
 
 
     @Operation(summary = "Buscar um funcionário pelo seu id",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "Id do funcionário",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Integer"))
+            },
             responses = {
                     @ApiResponse(
                             description = "Sucesso",
