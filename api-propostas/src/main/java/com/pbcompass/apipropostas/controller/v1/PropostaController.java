@@ -2,7 +2,7 @@ package com.pbcompass.apipropostas.controller.v1;
 
 import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
-import com.pbcompass.apipropostas.dto.ResultadoDto;
+import com.pbcompass.apipropostas.dto.ResultadoCadastrarDto;
 import com.pbcompass.apipropostas.dto.VotoCadastrarDto;
 import com.pbcompass.apipropostas.exception.custom.MensagemErroPadrao;
 import io.swagger.v3.oas.annotations.Operation;
@@ -296,6 +296,6 @@ public interface PropostaController {
             }
     )
     @PutMapping("/divulgarResultado/{propostaId}/{funcionarioId}")
-    ResponseEntity<ResultadoDto> divulgarResultado(@PathVariable("propostaId") Long propostaId, @PathVariable("funcionarioId") Long funcionarioId);
+    ResponseEntity<ResultadoCadastrarDto> divulgarResultado(@PathVariable("propostaId") Long propostaId, @PathVariable("funcionarioId") Long funcionarioId);
 
 }

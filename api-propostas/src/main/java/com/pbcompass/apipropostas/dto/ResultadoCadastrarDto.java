@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultadoDto {
+public class ResultadoCadastrarDto {
 
     private Long propostaId;
     private String resultado;
