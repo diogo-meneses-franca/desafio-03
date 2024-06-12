@@ -3,10 +3,12 @@ package com.pbcompass.apipropostas.services;
 import com.pbcompass.apipropostas.dto.*;
 import com.pbcompass.apipropostas.entities.Voto;
 import com.pbcompass.apipropostas.exception.custom.*;
+import com.pbcompass.apipropostas.feign.ResultadoFeignClient;
 import com.pbcompass.apipropostas.services.mapper.MapperGenerico;
 import com.pbcompass.apipropostas.entities.Proposta;
 import com.pbcompass.apipropostas.feign.FuncionarioFeignClient;
 import com.pbcompass.apipropostas.repository.PropostaRepository;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,8 +28,9 @@ import java.util.List;
 public class PropostaService {
 
     private final PropostaRepository repository;
-    private final FuncionarioFeignClient feignClient;
-    private final KafkaMensagemService kafkaMensagemService;
+    private final FuncionarioFeignClient funcionarioFeignClient;
+    private final ResultadoFeignClient resultadoClient;
+    private final ResultadoFeignClient resultadoFeignClient;
 
     @Transactional(readOnly = true)
     public PropostaRespostaDto buscarPorId(Long id) {
@@ -111,17 +114,21 @@ public class PropostaService {
         repository.save(proposta);
     }
 
-    public ResultadoDto divulgarResultado(Long propostaId, Long funcionarioId) {
+    public ResultadoCadastrarDto divulgarResultado(Long propostaId, Long funcionarioId) {
         Voto.Decisao resultado = calcularResultado(propostaId, funcionarioId);
-        ResultadoDto resultadoDto = new ResultadoDto(propostaId, resultado.toString());
-        kafkaMensagemService.enviarMensagem(resultadoDto.toString());
-        return resultadoDto;
+        ResultadoCadastrarDto resultadoCadastrarDto = new ResultadoCadastrarDto(propostaId, resultado.toString());
+        try {
+            resultadoFeignClient.cadastrar(resultadoCadastrarDto);
+        }catch (FeignException e) {
+            e.printStackTrace();
+        }
+        return resultadoCadastrarDto;
     }
 
     private FuncionarioRespostaDto buscarFuncionarioPorId(Long funcionarioId) {
         FuncionarioRespostaDto funcionario;
         try{
-            funcionario = feignClient.buscarPorId(funcionarioId).getBody();
+            funcionario = funcionarioFeignClient.buscarPorId(funcionarioId).getBody();
         }catch (RuntimeException e) {
             log.error(e.getMessage());
             throw new ErroAoBuscarFuncionarioException(String.format("Erro ao buscar funcionario com o id %d", funcionarioId));

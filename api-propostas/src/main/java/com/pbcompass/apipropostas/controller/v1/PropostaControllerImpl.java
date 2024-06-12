@@ -2,7 +2,7 @@ package com.pbcompass.apipropostas.controller.v1;
 
 import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
-import com.pbcompass.apipropostas.dto.ResultadoDto;
+import com.pbcompass.apipropostas.dto.ResultadoCadastrarDto;
 import com.pbcompass.apipropostas.dto.VotoCadastrarDto;
 import com.pbcompass.apipropostas.services.PropostaService;
 import lombok.RequiredArgsConstructor;
@@ -55,8 +55,8 @@ public class PropostaControllerImpl implements PropostaController {
     }
 
     @Override
-    public ResponseEntity<ResultadoDto> divulgarResultado(Long propostaId, Long funcionarioId) {
-        ResultadoDto resultado = service.divulgarResultado(propostaId, funcionarioId);
+    public ResponseEntity<ResultadoCadastrarDto> divulgarResultado(Long propostaId, Long funcionarioId) {
+        ResultadoCadastrarDto resultado = service.divulgarResultado(propostaId, funcionarioId);
         return ResponseEntity.ok().body(resultado);
     }
 
