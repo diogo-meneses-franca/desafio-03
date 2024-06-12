@@ -24,7 +24,13 @@ import org.springframework.web.bind.annotation.*;
 public interface FuncionarioController {
 
 
-    @Operation(summary = "Cadastrar um novo funcionário",
+    @Operation(
+            summary = "Cadastrar um novo funcionário",
+            description = "Endpoint para cadastrar um novo funcionário, sendo " +
+                    "todos os atributos obrigatórios. O CPF deve conter apenas números " +
+                    "com tamanho máximo de 11 caracteres, já o telefone deve conter de 10 a 14 caracteres. " +
+                    "Tanto o CPF quanto o email não poderão " +
+                    "ser cadastrados novamente em um novo funcionário.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Dados para criação de um novo funcionário",
                     required = true,
@@ -52,6 +58,14 @@ public interface FuncionarioController {
 
 
     @Operation(summary = "Buscar um funcionário pelo seu id",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "Id do funcionário",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Long"))
+            },
             responses = {
                     @ApiResponse(
                             description = "Sucesso",
@@ -74,6 +88,14 @@ public interface FuncionarioController {
     ResponseEntity<FuncionarioRespostaDto> buscarPorId(@PathVariable Long id);
 
     @Operation(summary = "Deletar um funcionário pelo seu id",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "Id do funcionário",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Long"))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "204",
@@ -139,19 +161,16 @@ public interface FuncionarioController {
                     @Parameter(
                             name = "page",
                             description = "numero da pagina",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "Integer")),
                     @Parameter(
                             name = "size",
                             description = "elementos por pagina",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "Integer")),
                     @Parameter(
                             name = "direction",
                             description = "direção da ordenação, asc para ascendente ou desc para descendente",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "String"))
             },

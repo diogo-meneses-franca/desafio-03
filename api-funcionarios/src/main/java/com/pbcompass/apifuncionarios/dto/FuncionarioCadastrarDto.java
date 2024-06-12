@@ -1,4 +1,5 @@
 package com.pbcompass.apifuncionarios.dto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,8 +18,9 @@ public class FuncionarioCadastrarDto {
     @Size(max = 150, message = "Nome deve ter no máximo 150 caracteres")
     private String nome;
 
-    @Size(min = 11, max = 11, message = "CPF deve possui somente números, tamanho minimo e maximo 11 caracteres")
+    @Size(min = 11, max = 11, message = "CPF deve possuir somente números, tamanho minimo e maximo 11 caracteres")
     @CPF
+    @Schema(required = true)
     private String cpf;
 
     @NotBlank(message = "Endereço não deve estar em branco ou nulo")
