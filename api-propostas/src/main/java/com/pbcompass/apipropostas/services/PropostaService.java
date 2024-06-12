@@ -1,9 +1,6 @@
 package com.pbcompass.apipropostas.services;
 
-import com.pbcompass.apipropostas.dto.FuncionarioRespostaDto;
-import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
-import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
-import com.pbcompass.apipropostas.dto.VotoCadastrarDto;
+import com.pbcompass.apipropostas.dto.*;
 import com.pbcompass.apipropostas.entities.Voto;
 import com.pbcompass.apipropostas.exception.custom.*;
 import com.pbcompass.apipropostas.services.mapper.MapperGenerico;
@@ -22,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -31,6 +27,7 @@ public class PropostaService {
 
     private final PropostaRepository repository;
     private final FuncionarioFeignClient feignClient;
+    private final KafkaMensagemService kafkaMensagemService;
 
     @Transactional(readOnly = true)
     public PropostaRespostaDto buscarPorId(Long id) {
@@ -114,6 +111,13 @@ public class PropostaService {
         repository.save(proposta);
     }
 
+    public ResultadoDto divulgarResultado(Long propostaId, Long funcionarioId) {
+        Voto.Decisao resultado = calcularResultado(propostaId, funcionarioId);
+        ResultadoDto resultadoDto = new ResultadoDto(propostaId, resultado.toString());
+        kafkaMensagemService.enviarMensagem(resultadoDto.toString());
+        return resultadoDto;
+    }
+
     private FuncionarioRespostaDto buscarFuncionarioPorId(Long funcionarioId) {
         FuncionarioRespostaDto funcionario;
         try{
@@ -123,27 +127,6 @@ public class PropostaService {
             throw new ErroAoBuscarFuncionarioException(String.format("Erro ao buscar funcionario com o id %d", funcionarioId));
         }
         return funcionario;
-    }
-
-    public Voto.Decisao calcularResultado(Long propostaId, Long funcionarioId) {
-        Proposta proposta = buscarPropostaPorId(propostaId);
-        if(!funcionarioId.equals(proposta.getFuncionarioId())) {
-            throw new FuncionarioNaoAutorizadoException("Somente o criador da proposta é autorizado a calcular o resultado");
-        }
-        if (votacaoEstaAberta(proposta)) {
-            throw new VotacaoEmAndamentoException("Aguarde o encerramento da votação para calcular o resultado");
-        }
-        List<Voto> votos = proposta.getVotos();
-        Integer aprovar = 0;
-        Integer reprovar = 0;
-        for(Voto voto : votos) {
-            if(voto.getDecisao().equals(Voto.Decisao.APROVAR)){
-                aprovar++;
-            } else {
-                reprovar++;
-            }
-        }
-        return (aprovar > reprovar) ? Voto.Decisao.APROVAR : Voto.Decisao.REJEITAR;
     }
 
     private Boolean votacaoEstaAberta(Proposta proposta) {
@@ -162,6 +145,27 @@ public class PropostaService {
                 () -> new RecursoNaoEncontrado(String.format("Proposta com o id %d não encontrada", propostaId))
         );
         return proposta;
+    }
+
+    private Voto.Decisao calcularResultado(Long propostaId, Long funcionarioId) {
+        Proposta proposta = buscarPropostaPorId(propostaId);
+        if(!funcionarioId.equals(proposta.getFuncionarioId())) {
+            throw new FuncionarioNaoAutorizadoException("Somente o criador da proposta é autorizado a divulgar o resultado");
+        }
+        if (votacaoEstaAberta(proposta)) {
+            throw new VotacaoEmAndamentoException("Aguarde o encerramento da votação para divulgar o resultado");
+        }
+        List<Voto> votos = proposta.getVotos();
+        int aprovar = 0;
+        int reprovar = 0;
+        for(Voto voto : votos) {
+            if(voto.getDecisao().equals(Voto.Decisao.APROVAR)){
+                aprovar++;
+            } else {
+                reprovar++;
+            }
+        }
+        return (aprovar > reprovar) ? Voto.Decisao.APROVAR : Voto.Decisao.REJEITAR;
     }
 
 }
