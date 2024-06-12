@@ -1,5 +1,6 @@
 package com.pbcompass.apifuncionarios.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -24,6 +25,7 @@ public class FuncionarioRespostaDto {
 
     @Size(min = 11, max = 11, message = "CPF deve possuir somente números, tamanho minimo e maximo 11 caracteres")
     @CPF
+    @Schema(required = true)
     private String cpf;
 
     @NotBlank(message = "Endereço não deve estar em branco ou nulo")
