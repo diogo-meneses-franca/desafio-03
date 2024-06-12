@@ -2,8 +2,8 @@ package com.pbcompass.apipropostas.controller.v1;
 
 import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
+import com.pbcompass.apipropostas.dto.ResultadoDto;
 import com.pbcompass.apipropostas.dto.VotoCadastrarDto;
-import com.pbcompass.apipropostas.entities.Voto;
 import com.pbcompass.apipropostas.exception.custom.MensagemErroPadrao;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,21 +18,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-
 @RequestMapping("/api/v1/propostas")
 public interface PropostaController {
 
     @Operation(
             summary = "Cadastrar uma proposta",
-            description = "Endpoint para cadastrar uma nova proposta associada a um funcionário especificado pelo ID.",
+            description = "Endpoint para cadastrar uma nova proposta " +
+                    "associada a um funcionário especificado pelo ID. " +
+                    "Os atributos 'duracaoEmMinutos' e 'inicioVotacao' não são obrigatórios, " +
+                    "caso não sejam fornecidos os valores são definidos para 1 minuto e o horário local " +
+                    "local no momento da criação da proposta ",
             parameters = {
                     @Parameter(
                             name = "funcionarioID",
                             description = "ID do funcionário ao qual a proposta será associada",
                             required = true,
-                            in = ParameterIn.QUERY,
+                            in = ParameterIn.PATH,
                             schema = @Schema(type = "long"))},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Dados para criação de uma nova proposta",
@@ -66,6 +67,14 @@ public interface PropostaController {
     );
 
     @Operation(summary = "Buscar uma proposta por id",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "Id da proposta",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Integer"))
+            },
             responses = {
                     @ApiResponse(
                             description = "Sucesso",
@@ -99,21 +108,24 @@ public interface PropostaController {
             summary = "Busca todas as propostas paginadas",
             parameters = {
                     @Parameter(
+                            name = "id",
+                            description = "Id da proposta",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Integer")),
+                    @Parameter(
                             name = "page",
                             description = "numero da pagina",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "Integer")),
                     @Parameter(
                             name = "size",
                             description = "elementos por pagina",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "Integer")),
                     @Parameter(
                             name = "direction",
                             description = "direção da ordenação, asc para ascendente ou desc para descendente",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "String"))
             },
@@ -168,7 +180,15 @@ public interface PropostaController {
     @PutMapping
     ResponseEntity<PropostaRespostaDto> editar(@RequestBody @Valid PropostaRespostaDto dto);
 
-    @Operation(summary = "Deleta um Proposta pelo seu id",
+    @Operation(summary = "Exclui um Proposta pelo seu id",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "Id da proposta",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Long"))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "204",
@@ -194,12 +214,57 @@ public interface PropostaController {
             }
     )
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(@PathVariable Long id);
+    ResponseEntity<Void> excluir(@PathVariable Long id);
 
+
+    @Operation(summary = "Vota em uma proposta",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Dados para votar em uma proposta",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = VotoCadastrarDto.class))
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "No Content",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "É permitido somente um voto por id!",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "A votação desta proposta já foi encerrada!",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+            }
+    )
     @PutMapping("/votar")
     ResponseEntity<Void> votar(@RequestBody VotoCadastrarDto dto);
 
-    @Operation(summary = "Calcula os votos de uma proposta",
+    @Operation(summary = "Divulga o resultado de uma proposta",
+            parameters = {
+                    @Parameter(
+                            name = "propostaId",
+                            description = "Id da proposta",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Long")),
+                    @Parameter(
+                            name = "funcionarioId",
+                            description = "Id do funcionario",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Long"))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -207,13 +272,13 @@ public interface PropostaController {
                             content = @Content),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Votação em andamento",
+                            description = "Aguarde o encerramento da votação para divulgar o resultado",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = MensagemErroPadrao.class))),
                     @ApiResponse(
                             responseCode = "403",
-                            description = "Funcionário não autorizado a realizar o cálculo",
+                            description = "Somente o criador da proposta é autorizado a divulgar o resultado",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = MensagemErroPadrao.class))),
@@ -230,7 +295,7 @@ public interface PropostaController {
                                     schema = @Schema(implementation = MensagemErroPadrao.class))),
             }
     )
-    @PutMapping("/calcular/{propostaId}")
-    ResponseEntity<Voto.Decisao> calcularResultado(@PathVariable Long propostaId, @RequestParam("funcionarioId") Long funcionarioId);
+    @PutMapping("/divulgarResultado/{propostaId}/{funcionarioId}")
+    ResponseEntity<ResultadoDto> divulgarResultado(@PathVariable("propostaId") Long propostaId, @PathVariable("funcionarioId") Long funcionarioId);
 
 }
