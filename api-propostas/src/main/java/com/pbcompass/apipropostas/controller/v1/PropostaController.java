@@ -4,7 +4,6 @@ import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
 import com.pbcompass.apipropostas.dto.ResultadoDto;
 import com.pbcompass.apipropostas.dto.VotoCadastrarDto;
-import com.pbcompass.apipropostas.entities.Voto;
 import com.pbcompass.apipropostas.exception.custom.MensagemErroPadrao;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,9 +17,6 @@ import jakarta.websocket.server.PathParam;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 
 @RequestMapping("/api/v1/propostas")
 public interface PropostaController {

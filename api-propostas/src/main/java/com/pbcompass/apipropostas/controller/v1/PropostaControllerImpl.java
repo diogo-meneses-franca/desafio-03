@@ -4,7 +4,6 @@ import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
 import com.pbcompass.apipropostas.dto.ResultadoDto;
 import com.pbcompass.apipropostas.dto.VotoCadastrarDto;
-import com.pbcompass.apipropostas.entities.Voto;
 import com.pbcompass.apipropostas.services.PropostaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
