@@ -1,5 +1,6 @@
 package com.pbcompass.apiresultados.controller.v1;
 
+import com.pbcompass.apiresultados.dto.ResultadoCadastrarDto;
 import com.pbcompass.apiresultados.dto.ResultadoRespostaDto;
 import com.pbcompass.apiresultados.service.ResultadoService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ResultadoControllerImpl implements ResultadoController {
 
     private final ResultadoService service;
+
+    @Override
+    public ResponseEntity<ResultadoRespostaDto> cadastrar(ResultadoCadastrarDto dto) {
+        ResultadoRespostaDto resposta = service.cadastrar(dto);
+        return ResponseEntity.ok(resposta);
+    }
 
     @Override
     public ResponseEntity<ResultadoRespostaDto> buscarPorId(Long id) {
