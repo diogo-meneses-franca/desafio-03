@@ -29,7 +29,7 @@ public interface PropostaController {
                             name = "funcionarioID",
                             description = "ID do funcionário ao qual a proposta será associada",
                             required = true,
-                            in = ParameterIn.QUERY,
+                            in = ParameterIn.PATH,
                             schema = @Schema(type = "long"))},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Dados para criação de uma nova proposta",
@@ -96,21 +96,24 @@ public interface PropostaController {
             summary = "Busca todas as propostas paginadas",
             parameters = {
                     @Parameter(
+                            name = "id",
+                            description = "Id da proposta",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Integer")),
+                    @Parameter(
                             name = "page",
                             description = "numero da pagina",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "Integer")),
                     @Parameter(
                             name = "size",
                             description = "elementos por pagina",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "Integer")),
                     @Parameter(
                             name = "direction",
                             description = "direção da ordenação, asc para ascendente ou desc para descendente",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "String"))
             },
@@ -165,7 +168,15 @@ public interface PropostaController {
     @PutMapping
     ResponseEntity<PropostaRespostaDto> editar(@RequestBody @Valid PropostaRespostaDto dto);
 
-    @Operation(summary = "Deleta um Proposta pelo seu id",
+    @Operation(summary = "Exclui um Proposta pelo seu id",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "Id da proposta",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Long"))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "204",
@@ -191,7 +202,7 @@ public interface PropostaController {
             }
     )
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(@PathVariable Long id);
+    ResponseEntity<Void> excluir(@PathVariable Long id);
 
 
     @Operation(summary = "Vota em uma proposta",
@@ -239,8 +250,8 @@ public interface PropostaController {
                             name = "funcionarioId",
                             description = "Id do funcionario",
                             required = true,
-                            in = ParameterIn.QUERY,
-                            schema = @Schema(type = "Integer"))
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Long"))
             },
             responses = {
                     @ApiResponse(
@@ -272,7 +283,7 @@ public interface PropostaController {
                                     schema = @Schema(implementation = MensagemErroPadrao.class))),
             }
     )
-    @PutMapping("/divulgarResultado/{propostaId}")
-    ResponseEntity<ResultadoDto> divulgarResultado(@PathVariable Long propostaId, @RequestParam("funcionarioId") Long funcionarioId);
+    @PutMapping("/divulgarResultado/{propostaId}/{funcionarioId}")
+    ResponseEntity<ResultadoDto> divulgarResultado(@PathVariable("propostaId") Long propostaId, @PathVariable("funcionarioId") Long funcionarioId);
 
 }
