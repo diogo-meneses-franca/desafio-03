@@ -14,7 +14,7 @@ import lombok.Setter;
 public class ResultadoCadastrarDto {
 
     @NotNull(message =  "O id da proposta não deve ser nulo")
-    private Long propostaid;
+    private Long propostaId;
 
     @NotBlank(message = "Resultado nao deve ser nulo ou estar em branco")
     @Pattern(regexp = "APROVAR|REJEITAR", message = "Valor inválido. Use APROVAR ou REJEITAR.")
