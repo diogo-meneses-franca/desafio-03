@@ -1,5 +1,6 @@
 package com.pbcompass.apiresultados.controller.v1;
 
+import com.pbcompass.apiresultados.dto.ResultadoCadastrarDto;
 import com.pbcompass.apiresultados.dto.ResultadoRespostaDto;
 import com.pbcompass.apiresultados.exception.custom.MensagemErroPadrao;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,15 +10,46 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/resultados")
 public interface ResultadoController {
+
+    @Operation(
+            summary = "Cadastrar um resultado de uma proposta",
+            description = "Endpoint para cadastrar um resultado de uma proposta. " +
+                    "Necessário o id da proposta e a decisão dos votos, sendo esse campo " +
+                    "composto por APROVAR ou REJEITAR apenas.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Dados para criação de uma nova proposta",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = ResultadoCadastrarDto.class))
+            ),
+            responses = {
+                    @ApiResponse(
+                            description = "Sucesso",
+                            responseCode = "201",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ResultadoCadastrarDto.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Parâmetros inválidos",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro ao buscar funcionario com o id fornecido",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+            }
+    )
+    @PostMapping
+    ResponseEntity<ResultadoRespostaDto> cadastrar(@RequestBody @Valid ResultadoCadastrarDto dto);
 
     @Operation(summary = "Buscar o resultado de uma proposta por id",
             parameters = {
