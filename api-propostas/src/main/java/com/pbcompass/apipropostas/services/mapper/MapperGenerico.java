@@ -4,9 +4,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MapperGenerico {
 
@@ -18,9 +15,4 @@ public class MapperGenerico {
         return new ModelMapper().map(dto, entityClass);
     }
 
-    public static <T, D> List<D> toDtoList(List<T> entityList, Class<D> dtoClass) {
-        return entityList.stream()
-                .map(entity -> toDto(entity, dtoClass))
-                .collect(Collectors.toList());
-    }
 }
