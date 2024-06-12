@@ -23,7 +23,11 @@ public interface PropostaController {
 
     @Operation(
             summary = "Cadastrar uma proposta",
-            description = "Endpoint para cadastrar uma nova proposta associada a um funcionário especificado pelo ID.",
+            description = "Endpoint para cadastrar uma nova proposta " +
+                    "associada a um funcionário especificado pelo ID. " +
+                    "Os atributos 'duracaoEmMinutos' e 'inicioVotacao' não são obrigatórios, " +
+                    "caso não sejam fornecidos os valores são definidos para 1 minuto e o horário local " +
+                    "local no momento da criação da proposta ",
             parameters = {
                     @Parameter(
                             name = "funcionarioID",
@@ -63,6 +67,14 @@ public interface PropostaController {
     );
 
     @Operation(summary = "Buscar uma proposta por id",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "Id da proposta",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Integer"))
+            },
             responses = {
                     @ApiResponse(
                             description = "Sucesso",
