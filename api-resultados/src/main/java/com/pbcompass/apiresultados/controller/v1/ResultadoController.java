@@ -5,6 +5,7 @@ import com.pbcompass.apiresultados.exception.custom.MensagemErroPadrao;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -56,6 +57,39 @@ public interface ResultadoController {
     @GetMapping("/{id}")
     ResponseEntity<ResultadoRespostaDto> buscarPorId(@PathVariable Long id);
 
+    @Operation(
+            summary = "Busca todas os resultados de propostas paginadas",
+            parameters = {
+                    @Parameter(
+                            name = "page",
+                            description = "numero da pagina",
+                            in = ParameterIn.QUERY,
+                            schema = @Schema(type = "Integer")),
+                    @Parameter(
+                            name = "size",
+                            description = "elementos por pagina",
+                            in = ParameterIn.QUERY,
+                            schema = @Schema(type = "Integer")),
+                    @Parameter(
+                            name = "direction",
+                            description = "direção da ordenação, asc para ascendente ou desc para descendente",
+                            in = ParameterIn.QUERY,
+                            schema = @Schema(type = "String"))
+            },
+            responses = {
+                    @ApiResponse(
+                            description = "Sucesso",
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ResultadoRespostaDto.class)))),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+            }
+    )
     @GetMapping
     ResponseEntity<Page<ResultadoRespostaDto>> buscarTodos(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
