@@ -13,9 +13,7 @@
 
 O Sistema de Votação Empresarial é uma API de backend dedicada à gestão dos processos de decisão dentro de uma empresa.
 Sua arquitetura é baseada REST, proporcionando acesso aos recursos por meio de endpoints. A API assegura a persistência
-no dados no banco de dados. Além disso, emprega o Apache Kafka para comunicação, replicação e persistência dos
-resultados. Este sistema permite que equipes proponham e votem em diversas melhorias internas, oferecendo uma plataforma
-robusta para a colaboração e o aprimoramento contínuo dentro da organização.
+no dados no banco de dados.
 
 # <a name="micro-servicos"></a>Micro Serviços
 
@@ -52,7 +50,7 @@ por `http://localhost:8761`
 * Endereço individual
   `http://localhost:8081`
 
-### endponts
+### endpoints
 
 | Método    | URL                       | Descrição                                                                                  |
 |-----------|---------------------------|--------------------------------------------------------------------------------------------|
@@ -112,7 +110,7 @@ por `http://localhost:8761`
 * Endereço individual
   `http://localhost:8083`
 
-### endponts
+### endpoints
 
 | Método    | URL                      | Descrição                                                                                  |
 |-----------|--------------------------|--------------------------------------------------------------------------------------------|
@@ -120,9 +118,9 @@ por `http://localhost:8761`
 | `GET`     | /api/v1/resultados/{id}  | [Recupera um resultado pelo seu ID.](#buscarporid3)                                        |
 | navegador | /swagger-ui/index.html#/ | Documentação do swagger acessado pelo com acesso pelo endereço individual do micro serviço |
 
-## Documentação dos endponts
+## Documentação dos endpoints
 
-Esta seção define os métodos e o formato necessários para enviar uma solicitação, com base no link do endponts, caso
+Esta seção define os métodos e o formato necessários para enviar uma solicitação, com base no link do endpoints, caso
 necessário.
 
 ### MS-Funcionario
@@ -299,8 +297,6 @@ Para executar esta aplicação, são necessários os seguintes pré-requisitos:
 
 - JDK 17
 - Maven
-- docker (para o kafka)
-- Apache Kafka
 
 ## Execução
 
