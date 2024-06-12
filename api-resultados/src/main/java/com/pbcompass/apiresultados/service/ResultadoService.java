@@ -1,7 +1,8 @@
 package com.pbcompass.apiresultados.service;
 
-
 import com.pbcompass.apiresultados.dto.PropostaRespostaDto;
+
+import com.pbcompass.apiresultados.dto.ResultadoCadastrarDto;
 import com.pbcompass.apiresultados.dto.ResultadoRespostaDto;
 import com.pbcompass.apiresultados.entities.Resultado;
 import com.pbcompass.apiresultados.exception.custom.ErroAoBuscarPropostaException;
