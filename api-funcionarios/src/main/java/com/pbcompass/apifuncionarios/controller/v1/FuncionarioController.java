@@ -24,7 +24,13 @@ import org.springframework.web.bind.annotation.*;
 public interface FuncionarioController {
 
 
-    @Operation(summary = "Cadastrar um novo funcionário",
+    @Operation(
+            summary = "Cadastrar um novo funcionário",
+            description = "Endpoint para cadastrar um novo funcionário, sendo " +
+                    "todos os atributos obrigatórios. O CPF deve conter apenas números " +
+                    "com tamanho máximo de 11 caracteres, já o telefone deve conter de 10 a 14 caracteres. " +
+                    "Tanto o CPF quanto o email não poderão " +
+                    "ser cadastrados novamente em um novo funcionário.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Dados para criação de um novo funcionário",
                     required = true,
