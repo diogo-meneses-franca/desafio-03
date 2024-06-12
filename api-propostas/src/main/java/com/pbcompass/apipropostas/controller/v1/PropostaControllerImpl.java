@@ -43,7 +43,7 @@ public class PropostaControllerImpl implements PropostaController {
     }
 
     @Override
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> excluir(Long id) {
         service.excluir(id);
         return ResponseEntity.noContent().build();
     }
