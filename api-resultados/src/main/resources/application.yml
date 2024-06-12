@@ -19,12 +19,12 @@ spring:
       path: /h2-console
 springdoc:
   api-docs:
-    path: /v1/resultados
+    path: /v1/api-docs
   swagger-ui:
     path: /swagger-ui.html
   packages-to-scan: com.pbcompass.apiresultados.controller
 server:
-  port: 0
+  port: 8083
 eureka:
   client:
     service-url:
