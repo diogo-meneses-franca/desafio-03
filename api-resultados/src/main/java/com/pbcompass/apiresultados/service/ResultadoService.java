@@ -10,6 +10,7 @@ import com.pbcompass.apiresultados.exception.custom.RecursoNaoEncontrado;
 import com.pbcompass.apiresultados.feign.PropostaFeignClient;
 import com.pbcompass.apiresultados.repository.ResultadoRepository;
 import com.pbcompass.apiresultados.service.mapper.MapperGenerico;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,7 @@ public class ResultadoService {
 
     @Transactional
     public ResultadoRespostaDto cadastrar(ResultadoCadastrarDto dto) {
-        PropostaRespostaDto proposta = feignClient.buscarPorId(dto.getPropostaid()).getBody();
+        PropostaRespostaDto proposta = feignClient.buscarPorId(dto.getPropostaId()).getBody();
         Resultado resultado = MapperGenerico.toEntity(dto, Resultado.class);
         ResultadoRespostaDto respostaSalva = MapperGenerico.toDto(repository.save(resultado), ResultadoRespostaDto.class);
         respostaSalva.setProposta(proposta);
@@ -41,7 +42,14 @@ public class ResultadoService {
         Resultado resultado = repository.findById(id).orElseThrow(
                 () -> new RecursoNaoEncontrado(String.format("Resultado com o id %d não encontrado", id))
         );
+        PropostaRespostaDto proposta = null;
+        try {
+            proposta = feignClient.buscarPorId(resultado.getPropostaId()).getBody();
+        }catch (FeignException e){
+            e.printStackTrace();
+        }
         ResultadoRespostaDto resposta = MapperGenerico.toDto(resultado, ResultadoRespostaDto.class);
+        resposta.setProposta(proposta);
         return resposta;
     }
 
