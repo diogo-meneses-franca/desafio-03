@@ -2,6 +2,7 @@ package com.pbcompass.apipropostas.controller.v1;
 
 import com.pbcompass.apipropostas.dto.PropostaCadastrarDto;
 import com.pbcompass.apipropostas.dto.PropostaRespostaDto;
+import com.pbcompass.apipropostas.dto.ResultadoDto;
 import com.pbcompass.apipropostas.dto.VotoCadastrarDto;
 import com.pbcompass.apipropostas.entities.Voto;
 import com.pbcompass.apipropostas.exception.custom.MensagemErroPadrao;
@@ -196,10 +197,55 @@ public interface PropostaController {
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id);
 
+
+    @Operation(summary = "Vota em uma proposta",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Dados para votar em uma proposta",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = VotoCadastrarDto.class))
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "No Content",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "É permitido somente um voto por id!",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "A votação desta proposta já foi encerrada!",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+                    @ApiResponse(responseCode = "500",
+                            description = "Erro inesperado do servidor",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MensagemErroPadrao.class))),
+            }
+    )
     @PutMapping("/votar")
     ResponseEntity<Void> votar(@RequestBody VotoCadastrarDto dto);
 
-    @Operation(summary = "Calcula os votos de uma proposta",
+    @Operation(summary = "Divulga o resultado de uma proposta",
+            parameters = {
+                    @Parameter(
+                            name = "propostaId",
+                            description = "Id da proposta",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Long")),
+                    @Parameter(
+                            name = "funcionarioId",
+                            description = "Id do funcionario",
+                            required = true,
+                            in = ParameterIn.QUERY,
+                            schema = @Schema(type = "Integer"))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -207,13 +253,13 @@ public interface PropostaController {
                             content = @Content),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Votação em andamento",
+                            description = "Aguarde o encerramento da votação para divulgar o resultado",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = MensagemErroPadrao.class))),
                     @ApiResponse(
                             responseCode = "403",
-                            description = "Funcionário não autorizado a realizar o cálculo",
+                            description = "Somente o criador da proposta é autorizado a divulgar o resultado",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = MensagemErroPadrao.class))),
@@ -230,7 +276,7 @@ public interface PropostaController {
                                     schema = @Schema(implementation = MensagemErroPadrao.class))),
             }
     )
-    @PutMapping("/calcular/{propostaId}")
-    ResponseEntity<Voto.Decisao> calcularResultado(@PathVariable Long propostaId, @RequestParam("funcionarioId") Long funcionarioId);
+    @PutMapping("/divulgarResultado/{propostaId}")
+    ResponseEntity<ResultadoDto> divulgarResultado(@PathVariable Long propostaId, @RequestParam("funcionarioId") Long funcionarioId);
 
 }
