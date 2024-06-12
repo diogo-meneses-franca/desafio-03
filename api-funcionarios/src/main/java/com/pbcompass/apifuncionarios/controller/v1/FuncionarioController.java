@@ -153,19 +153,16 @@ public interface FuncionarioController {
                     @Parameter(
                             name = "page",
                             description = "numero da pagina",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "Integer")),
                     @Parameter(
                             name = "size",
                             description = "elementos por pagina",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "Integer")),
                     @Parameter(
                             name = "direction",
                             description = "direção da ordenação, asc para ascendente ou desc para descendente",
-                            required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(type = "String"))
             },
