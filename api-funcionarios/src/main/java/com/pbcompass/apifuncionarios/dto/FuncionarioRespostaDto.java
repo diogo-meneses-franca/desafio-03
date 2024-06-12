@@ -22,7 +22,7 @@ public class FuncionarioRespostaDto {
     @Size(max = 150, message = "Nome deve ter no máximo 150 caracteres")
     private String nome;
 
-    @Size(min = 11, max = 11, message = "CPF deve possui somente números, tamanho minimo e maximo 11 caracteres")
+    @Size(min = 11, max = 11, message = "CPF deve possuir somente números, tamanho minimo e maximo 11 caracteres")
     @CPF
     private String cpf;
 
