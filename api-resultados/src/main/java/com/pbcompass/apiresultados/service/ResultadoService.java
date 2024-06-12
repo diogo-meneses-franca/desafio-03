@@ -25,7 +25,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class ResultadoService {
 
     private final ResultadoRepository repository;
-    private PropostaFeignClient feignClient;
+    private final PropostaFeignClient feignClient;
+
+    @Transactional
+    public ResultadoRespostaDto cadastrar(ResultadoCadastrarDto dto) {
+        PropostaRespostaDto proposta = feignClient.buscarPorId(dto.getPropostaid()).getBody();
+        Resultado resultado = MapperGenerico.toEntity(dto, Resultado.class);
+        ResultadoRespostaDto respostaSalva = MapperGenerico.toDto(repository.save(resultado), ResultadoRespostaDto.class);
+        respostaSalva.setProposta(proposta);
+        return respostaSalva;
+    }
 
     @Transactional(readOnly = true)
     public ResultadoRespostaDto buscarPorId(Long id) {
