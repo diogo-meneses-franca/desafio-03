@@ -275,6 +275,28 @@
 			"name": "Resultados",
 			"item": [
 				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Cadastrar",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"propostaid\": 1,\r\n    \"resultado\": \"REJEITAR\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/api/v1/resultados"
+							},
+							"response": []
+						}
+					]
+				},
 					"name": "GET",
 					"item": [
 						{
