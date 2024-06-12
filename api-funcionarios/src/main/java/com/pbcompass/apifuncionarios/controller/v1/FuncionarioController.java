@@ -64,7 +64,7 @@ public interface FuncionarioController {
                             description = "Id do funcionário",
                             required = true,
                             in = ParameterIn.PATH,
-                            schema = @Schema(type = "Integer"))
+                            schema = @Schema(type = "Long"))
             },
             responses = {
                     @ApiResponse(
@@ -88,6 +88,14 @@ public interface FuncionarioController {
     ResponseEntity<FuncionarioRespostaDto> buscarPorId(@PathVariable Long id);
 
     @Operation(summary = "Deletar um funcionário pelo seu id",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "Id do funcionário",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            schema = @Schema(type = "Long"))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "204",
