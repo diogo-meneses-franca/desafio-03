@@ -17,14 +17,12 @@ public class FuncionarioControllerImpl implements FuncionarioController {
 
     @Override
     public ResponseEntity<FuncionarioRespostaDto> buscarPorId(Long id) {
-        FuncionarioRespostaDto resposta = service.buscarPorId(id);
-        return ResponseEntity.ok(resposta);
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @Override
     public ResponseEntity<FuncionarioRespostaDto> cadastrar(FuncionarioCadastrarDto dto) {
-        FuncionarioRespostaDto resposta = service.cadastrar(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.cadastrar(dto));
     }
 
     @Override
@@ -43,7 +41,6 @@ public class FuncionarioControllerImpl implements FuncionarioController {
 
     @Override
     public ResponseEntity<FuncionarioRespostaDto> editar(FuncionarioRespostaDto dto) {
-        FuncionarioRespostaDto resposta = service.editar(dto);
-        return ResponseEntity.ok(resposta);
+        return ResponseEntity.ok(service.editar(dto));
     }
 }
